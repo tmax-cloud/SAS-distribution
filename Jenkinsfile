@@ -4,20 +4,14 @@ pipeline {
     agent any
     environment {
 //        version = "${params.majorVersion}.${params.minorVersion}.${params.hotfixVersion}"
-//        dockerRegistry = "${params.dockerImageRepo}"
-        dockerRegistry = "192.168.9.12:5000"
-
-//        publishUrl = "http://${params.publishHost}:${params.publishPort}${params.publishDir}"
-//        repoUser = "${params.repoUser}"
-//        repoPassword = "${params.repoPassword}"
-        publishUrl = "http://192.168.9.12:8081/repository/maven-releases"
-        repoUser = "root"
-        repoPassword = "tmax@23"
-
         gitUrl = "${params.gitUrl}"
         gitCred = "${params.gitCred}"
         gitBranch = "${params.gitBranch}"
         version = "${gitBranch.tokenize('-')[1]}"
+        dockerRegistry = "192.168.9.12:5000"
+        publishUrl = "http://192.168.9.12:8081/repository/maven-releases"
+        repoUser = "root"
+        repoPassword = "tmax@23"
     }
 
     stages {
@@ -33,7 +27,6 @@ pipeline {
                     }
                 }
                 git([branch: "${gitBranch}", credentialsId:"${credId}", url: "http://${gitCred}@${gitUrl}"])
-//                   url: "https://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@github.com/dohyunKim12/testing_repo.git"
             }
         }
         stage('Git Fetch') {
@@ -42,17 +35,17 @@ pipeline {
 //                script {
 //                    if ("${gitBranch}" == 'master') {
 //                        echo "****************************************This is master!*********************************"
-//                        // ToDo master branch면 여기서 checkout -b 로 브랜치 하나 파고(브랜치명은 input version 이용) 체크아웃, 빌드 후 커밋. 태그도 남기기
+//                         ToDO if master branch, make branch by checkout -b (use input parameter version), then leave commit and tag
 //                        sh "git checkout -b release-${version}"
-//////                        sh "git commit -m 'Packaging for release-${version}'"
+//                        sh "git commit -m 'Packaging for release-${version}'"
 //                        sh "git tag release-${version}"
 //                        sh "git push --tags"
 //                        sh "git push origin"
-////                        sh "git push --set-upstream origin release-${version}"
+//                        sh "git push --set-upstream origin release-${version}"
 //                        firstBuild = true
 //                    } else {
-//                        echo "****************************************${gitBranch}!*********************************"
-//                        // ToDO 이미 release-0.0.* 브랜치면, 여기서 그냥 제일 최신커밋으로 빌드작업하기.
+//                        echo "****************************************${gitBranch}!***********************************"
+//                         ToDO if already in release-0.0.* branch, just build here using recent commit
 //                        firstBuild = false
 //                    }
 //                }
