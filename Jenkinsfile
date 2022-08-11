@@ -1,10 +1,18 @@
 pipeline {
     agent any
     environment {
+      // gitlab
         gitUrl = "192.168.1.150:10081/superobject/super-object.git"
         gitCred = "Rbxxb7pBtyw6D_KqbNWa"
+
+        // github - dohyun
+        // gitUrl = "github.com/dohyunKim12/SASNewStruct.git"
+        // gitCred = "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"
+
         gitBranch = "${params.gitBranch}"
+        // gitBranch = "master"
         version = "${gitBranch.tokenize('-')[1]}"
+        // version = "0.0.5"
         dockerRegistry = "192.168.9.12:5000"
         publishUrl = "http://192.168.9.12:8081/repository/maven-releases"
         repoUser = "root"
@@ -31,143 +39,147 @@ pipeline {
         stage('Git Tagging') {
             steps {
                 sh 'git fetch --all'
-//                script {
-//                    if ("${gitBranch}" == 'master') {
-//                        echo "****************************************This is master!*********************************"
-//                         ToDO if master branch, make branch by checkout -b (use input parameter version), then leave commit and tag
-//                        sh "git checkout -b release-${version}"
-//                        sh "git commit -m 'Packaging for release-${version}'"
-//                        sh "git tag release-${version}"
-//                        sh "git push --tags"
-//                        sh "git push origin"
-//                        sh "git push --set-upstream origin release-${version}"
-//                        firstBuild = true
-//                    } else {
-//                        echo "****************************************${gitBranch}!***********************************"
-//                         ToDO if already in release-0.0.* branch, just build here using recent commit
-//                        firstBuild = false
-//                    }
-//                }
+               script {
+                   if ("${gitBranch}" == 'master') {
+                       echo "****************************************This is master!*********************************"
+                        ToDO if master branch, make branch by checkout -b (use input parameter version), then leave commit and tag
+                       sh "git checkout -b release-${version}"
+                       sh "git commit -m 'Packaging for release-${version}'"
+                       sh "git tag release-${version}"
+                       sh "git push --tags"
+                       sh "git push origin"
+                       sh "git push --set-upstream origin release-${version}"
+                       firstBuild = true
+                   } else {
+                       echo "****************************************${gitBranch}!***********************************"
+                        ToDO if already in release-0.0.* branch, just build here using recent commit
+                       firstBuild = false
+                   }
+               }
                 script {
                     firstBuild = true
 
                     commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                     commitId = commitId.substring(1)
 
-                    tagName = "release-${version}"
-                    sh "git tag -a ${tagName} -m 'Version ${version} update'"
+                    // tagName = "release-${version}"
+                    // sh "git tag -a ${tagName} -m 'Version ${version} update'"
                     sh "ls -al"
                 }
             }
         }
-      //  stage('Build Jar') {
-      //      steps {
-      //          echo "${version}"
-      //          sh 'chmod +x ./gradlew'
-      //          sh "./gradlew clean build jenkins -PbuildVersion=${version} -PcommitId=${commitId}"
-      //      }
-      //  }
-      //  stage('Upload Jar') {
-      //      steps {
-      //          sh "./gradlew publish -PbuildVersion=${version} -PpublishUrl=${publishUrl} -PrepoUser=${repoUser} -PrepoPassword=${repoPassword}"
-      //      }
-      //  }
-      //  stage ('Build and Upload Docker Image') {
-      //      steps {
-      //          script {
-      //              def version = "${gitBranch}".tokenize('-')[1]
-      //              def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
-      //              docker.withRegistry('', 'dockercred') {
-      //                  dockerImage.push()
-      //              }
-      //              sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
-      //          }
-      //      }
-      //  }
-       stage('Edit ChangeLog') {
-            steps {
-                script {
-                    def gitDomain = "${gitUrl}".tokenize('/')[0]
-                    def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: 'release-0.0.2'],
-//                            to: [type: 'REF', value: 'master'],
-                            template:
-"""
-  {{#tags}}
-# {{name}}
- {{#issues}}
+       stage('Build Jar') {
+           steps {
+               echo "${version}"
+               sh 'chmod +x ./gradlew'
+               sh "./gradlew clean build jenkins -PbuildVersion=${version} -PcommitId=${commitId}"
+           }
+       }
+       stage('Upload Jar') {
+           steps {
+               sh "./gradlew publish -PbuildVersion=${version} -PpublishUrl=${publishUrl} -PrepoUser=${repoUser} -PrepoPassword=${repoPassword}"
+           }
+       }
+       stage('Build Package & Upload to ftp server') {
+           steps {
+                sh "sudo sh ./scripts/packaging.sh"
+           }
+       }
+       stage ('Build and Upload Docker Image') {
+           steps {
+               script {
+                   def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
+                   docker.withRegistry('', 'dockercred') {
+                       dockerImage.push()
+                   }
+                //    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
+               }
+           }
+       }
+//        stage('Edit ChangeLog') {
+//             steps {
+//                 script {
+//                     def gitDomain = "${gitUrl}".tokenize('/')[0]
+//                     def changelogString = gitChangelog returnType: 'STRING',
+//                            from: [type: 'REF', value: 'release-0.0.2'],
+// //                            to: [type: 'REF', value: 'master'],
+//                             template:
+// """
+//   {{#tags}}
+// # {{name}}
+//  {{#issues}}
  
-     {{#ifContainsType commits type='feat'}}
-## Features
+//      {{#ifContainsType commits type='feat'}}
+// ## Features
 
-    {{#commits}}
-      {{#ifCommitType . type='feat'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='feat'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='mod'}}
-## Refactor
+//      {{#ifContainsType commits type='mod'}}
+// ## Refactor
 
-    {{#commits}}
-      {{#ifCommitType . type='mod'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='mod'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='fix'}}
-## Bug Fixes
+//      {{#ifContainsType commits type='fix'}}
+// ## Bug Fixes
 
-    {{#commits}}
-      {{#ifCommitType . type='fix'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='fix'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='etc'}}
-## OTHERS
+//      {{#ifContainsType commits type='etc'}}
+// ## OTHERS
 
-    {{#commits}}
-      {{#ifCommitType . type='etc'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='etc'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
- {{/issues}}
-{{/tags}}
-"""
-                    writeFile file: "tmp/CHANGELOG_new", text: changelogString
-                    currentBuild.description = changelogString
-                    sh "mv CHANGELOG.md tmp/tmpfile"
-                    sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
-                    sh "cat tmp/tmpfile >> CHANGELOG.md"
-                    sh "ls -al"
-                }
-            }
-        }
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
+//  {{/issues}}
+// {{/tags}}
+// """
+//                     writeFile file: "tmp/CHANGELOG_new", text: changelogString
+//                     currentBuild.description = changelogString
+//                     sh "mv CHANGELOG.md tmp/tmpfile"
+//                     sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
+//                     sh "cat tmp/tmpfile >> CHANGELOG.md"
+//                     sh "ls -al"
+//                 }
+//             }
+//         }
 //         stage('Send Email') {
 //             steps {
 //                 emailext (
@@ -180,6 +192,19 @@ pipeline {
 // 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
 // ${version}의 개선 및 추가된 사항은 첨부된 CHANGELOG.md 파일을 확인 부탁드립니다.
+
+// ===
+
+// Project 전체 구조가 다음과 같이 변경되었습니다.
+
+// - 기존에 하나의 Jar 파일에서 모든 외부 라이브러리를 갖고 있는 문제 인식.
+// - super-app-server.jar 파일과 외부 라이브러리 분리,
+// - 해당 클래스들을 Runtime에 동적으로 로딩해주는 runtime.jar 파일 생성.
+
+// 따라서 변경된 구조에서는 생성한 service.jar를 runtime.jar와 동일한 path에 놓고
+// runtime.jar 를 실행시키면 됩니다.
+
+// 자세한 내용은 추후 WIKI 가이드에 문서화 할 예정이니 참고 부탁드립니다.
 
 // ===
 
@@ -209,24 +234,25 @@ pipeline {
 
 // """,
 //                         to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; cqa1@tmax.co.kr;",
+//                         // to: "dohyun_kim5@tmax.co.kr;",
 //                         from: "dohyun_kim5@tmax.co.kr"
 //                 )
 //             }
 //         }
-        // stage('Git Push') {
-        //     steps {
-        //         echo "pushing..."
-        //         script {
-        //             commitMsg = "Release commit - version ${version}"
-        //             sh "git add -A"
-        //             sh "git commit -m \"${commitMsg}\" || true"
-        //             sh "git remote rm origin"
-        //             sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
-        //             sh "git remote -v"
-        //             sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
-        //             sh "git push origin refs/heads/${gitBranch}:refs/heads/${gitBranch}"
-        //         }
-        //     }
-        // }
+//         stage('Git Push') {
+//             steps {
+//                 echo "pushing..."
+//                 script {
+//                     commitMsg = "Release commit - version ${version}"
+//                     sh "git add -A"
+//                     sh "git commit -m \"${commitMsg}\" || true"
+//                     sh "git remote rm origin"
+//                     sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
+//                     sh "git remote -v"
+//                     sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
+//                     sh "git push origin refs/heads/${gitBranch}:refs/heads/${gitBranch}"
+//                 }
+//             }
+//         }
     }
 }
