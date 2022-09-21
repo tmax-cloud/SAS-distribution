@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent any 
     environment {
       // gitlab
         gitUrl = "192.168.1.150:10081/superobject/super-object.git"
@@ -32,8 +32,8 @@ pipeline {
                     } else {
                         credId = 'gitlab_token'
                     }
+                    git([branch: "${gitBranch}", credentialsId:"${credId}", url: "http://${gitCred}@${gitUrl}"])
                 }
-                git([branch: "${gitBranch}", credentialsId:"${credId}", url: "http://${gitCred}@${gitUrl}"])
             }
         }
         stage('Git Tagging') {
@@ -57,7 +57,7 @@ pipeline {
                     commitId = commitId.substring(1)
 
                     tagName = "release-${version}"
-                    sh "git tag -a ${tagName} -m 'Version ${version} update'"
+                    // sh "git tag -a ${tagName} -m 'Version ${version} update'"
                     sh "ls -al"
                 }
             }
@@ -93,10 +93,11 @@ pipeline {
        stage('Edit ChangeLog') {
             steps {
                 script {
+
                     def gitDomain = "${gitUrl}".tokenize('/')[0]
                     def changelogString = gitChangelog returnType: 'STRING',
                            from: [type: 'REF', value: 'master'],
-//                            to: [type: 'REF', value: 'master'],
+                            // to: [type: 'REF', value: 'master'],
                             template:
 """
   {{#tags}}
@@ -186,6 +187,11 @@ pipeline {
 // 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
 // ${version}의 개선 및 추가된 사항은 첨부된 CHANGELOG.md 파일을 확인 부탁드립니다.
+
+// ===
+
+// 안내드린 SAS Runtime Web Server에 DB table create ddl문과 k8s Manifest yaml파일을 포함하여 배포하였습니다.
+// 참고해주시길 부탁드립니다.
 
 // ===
 
