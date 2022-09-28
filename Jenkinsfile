@@ -13,6 +13,7 @@ pipeline {
         gitBranch = "master"
         // version = "${gitBranch.tokenize('-')[1]}"
         version = "${params.version}"
+        prev_version = "${params.prev_version}"
         dockerRegistry = "192.168.9.12:5000"
         publishUrl = "http://192.168.9.12:8081/repository/maven-releases"
         repoUser = "root"
@@ -27,6 +28,7 @@ pipeline {
                 sh 'rm -rf *'
                 sh 'rm -rf .g*'
                 script {
+                    echo "${env.WORKSPACE}"
                     if ("${gitUrl.tokenize('/')[0]}" == 'github.com') {
                         credId = 'dohyun_github'
                     } else {
@@ -42,23 +44,26 @@ pipeline {
                script {
                    if ("${gitBranch}" == 'master') {
                        echo "****************************************This is master!*********************************"
+
+                        if ("${prev_version}" == "default") {
+                            // prev_version = version.tokenize('.')[0] + "." + version.tokenize('.')[1] + "." + (version.tokenize('.')[2].toInteger() -1.toInteger())
+                            prev_version = sh(script:"sudo git describe --tags --abbrev=0", returnStdout: true).tokenize('-')[1]
+                            echo "${prev_version}"
+                        }
+
                        sh "git checkout -b release-${version}"
-                       sh "git tag release-${version}"
-                    //    sh "git push --tags"
-                    //    sh "git push origin"
-                    //    sh "git push --set-upstream origin release-${version}"
+                       commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
+                       commitId = commitId.substring(1)
+                       tagName = "release-${version}"
+                       sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    } else {
                        echo "****************************************${gitBranch}!***********************************"
+                       commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
+                       commitId = commitId.substring(1)
+                       tagName = "release-${version}"
+                       sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    }
                }
-                script {
-                    commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
-                    commitId = commitId.substring(1)
-
-                    tagName = "release-${version}"
-                    // sh "git tag -a ${tagName} -m 'Version ${version} update'"
-                    sh "ls -al"
-                }
             }
         }
     //    stage('Build Jar') {
@@ -95,8 +100,8 @@ pipeline {
 
                     def gitDomain = "${gitUrl}".tokenize('/')[0]
                     def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: 'master'],
-                            // to: [type: 'REF', value: 'master'],
+                           from: [type: 'REF', value: "tags/release-${prev_version}"],
+                            to: [type: 'REF', value: "tags/release-${version}"],
                             template:
 """
   {{#tags}}
@@ -244,5 +249,15 @@ pipeline {
 //                 }
 //             }
 //         }
+        stage('Cleaning...') {
+            steps {
+                echo "All work Done. Cleaning..."
+                echo "Check the @tmp directory for confirm."
+                script {
+                    sh "rsync -a ${env.WORKSPACE} ${env.WORKSPACE}@tmp"
+                }
+                deleteDir()
+            }
+        }
     }
 }
