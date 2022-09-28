@@ -254,7 +254,11 @@ pipeline {
                 echo "All work Done. Cleaning..."
                 echo "Check the @tmp directory for confirm."
                 script {
-                    sh "rsync -a ${env.WORKSPACE} ${env.WORKSPACE}@tmp"
+                    sh "sudo echo ${WORKSPACE}"
+                    sh "sudo rsync -a ${env.WORKSPACE} ${env.WORKSPACE}@tmp"
+                    sh "sudo echo ${WORKSPACE}"
+                    sh "cd ${WORKSPACE}"
+                    sh "sudo chown -R jenkins ."
                 }
                 deleteDir()
             }
