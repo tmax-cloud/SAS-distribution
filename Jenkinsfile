@@ -43,11 +43,10 @@ pipeline {
                    if ("${gitBranch}" == 'master') {
                        echo "****************************************This is master!*********************************"
                        sh "git checkout -b release-${version}"
-                       sh "git commit -m 'Packaging for release-${version}'"
                        sh "git tag release-${version}"
-                       sh "git push --tags"
-                       sh "git push origin"
-                       sh "git push --set-upstream origin release-${version}"
+                    //    sh "git push --tags"
+                    //    sh "git push origin"
+                    //    sh "git push --set-upstream origin release-${version}"
                    } else {
                        echo "****************************************${gitBranch}!***********************************"
                    }
