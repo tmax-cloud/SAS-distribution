@@ -9,8 +9,8 @@ pipeline {
         // gitUrl = "github.com/dohyunKim12/SASNewStruct.git"
         // gitCred = "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"
 
-        // gitBranch = "${params.gitBranch}"
-        gitBranch = "master"
+        gitBranch = "${params.gitBranch}"
+        // gitBranch = "master"
         // version = "${gitBranch.tokenize('-')[1]}"
         version = "${params.version}"
         prev_version = "${params.prev_version}"
@@ -23,10 +23,12 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
-                deleteDir()
+                sh 'ls -al'
+                sh "sudo chown -R jenkins ."
                 sh 'ls -al'
                 sh 'rm -rf *'
                 sh 'rm -rf .g*'
+                sh 'git init'
                 script {
                     echo "${env.WORKSPACE}"
                     if ("${gitUrl.tokenize('/')[0]}" == 'github.com') {
@@ -42,15 +44,14 @@ pipeline {
             steps {
                 sh 'git fetch --all'
                script {
+                   if ("${prev_version}" == "default") {
+                        // prev_version = version.tokenize('.')[0] + "." + version.tokenize('.')[1] + "." + (version.tokenize('.')[2].toInteger() -1.toInteger())
+                        prev_version = sh(script:"sudo git describe --tags --abbrev=0", returnStdout: true).tokenize('-')[1]
+                        echo "${prev_version}"
+                   }
+
                    if ("${gitBranch}" == 'master') {
                        echo "****************************************This is master!*********************************"
-
-                        if ("${prev_version}" == "default") {
-                            // prev_version = version.tokenize('.')[0] + "." + version.tokenize('.')[1] + "." + (version.tokenize('.')[2].toInteger() -1.toInteger())
-                            prev_version = sh(script:"sudo git describe --tags --abbrev=0", returnStdout: true).tokenize('-')[1]
-                            echo "${prev_version}"
-                        }
-
                        sh "git checkout -b release-${version}"
                        commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                        commitId = commitId.substring(1)
@@ -61,7 +62,7 @@ pipeline {
                        commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                        commitId = commitId.substring(1)
                        tagName = "release-${version}"
-                       sh "git tag -a ${tagName} -m 'Version ${version} update'"
+                      //  sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    }
                }
             }
