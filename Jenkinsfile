@@ -66,34 +66,34 @@ pipeline {
                }
             }
         }
-    //    stage('Build Jar') {
-    //        steps {
-    //            echo "${version}"
-    //            sh 'chmod +x ./gradlew'
-    //            sh "./gradlew clean build jenkins -PbuildVersion=${version} -PcommitId=${commitId}"
-    //        }
-    //    }
-    //    stage('Upload Jar') {
-    //        steps {
-    //            sh "./gradlew publish -PbuildVersion=${version} -PpublishUrl=${publishUrl} -PrepoUser=${repoUser} -PrepoPassword=${repoPassword}"
-    //        }
-    //    }
-    //    stage('Build Package & Upload to ftp server') {
-    //        steps {
-    //             sh "sudo sh ./scripts/packaging.sh"
-    //        }
-    //    }
-    //    stage ('Build and Upload Docker Image') {
-    //        steps {
-    //            script {
-    //                def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
-    //                docker.withRegistry('', 'dockercred') {
-    //                    dockerImage.push()
-    //                }
-    //             //    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
-    //            }
-    //        }
-    //    }
+       stage('Build Jar') {
+           steps {
+               echo "${version}"
+               sh 'chmod +x ./gradlew'
+               sh "./gradlew clean build jenkins -PbuildVersion=${version} -PcommitId=${commitId}"
+           }
+       }
+       stage('Upload Jar') {
+           steps {
+               sh "./gradlew publish -PbuildVersion=${version} -PpublishUrl=${publishUrl} -PrepoUser=${repoUser} -PrepoPassword=${repoPassword}"
+           }
+       }
+       stage('Build Package & Upload to ftp server') {
+           steps {
+                sh "sudo sh ./scripts/packaging.sh"
+           }
+       }
+       stage ('Build and Upload Docker Image') {
+           steps {
+               script {
+                   def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
+                   docker.withRegistry('', 'dockercred') {
+                       dockerImage.push()
+                   }
+                //    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
+               }
+           }
+       }
        stage('Edit ChangeLog') {
             steps {
                 script {
