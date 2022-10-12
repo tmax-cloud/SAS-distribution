@@ -83,177 +83,177 @@ pipeline {
                 sh "sudo sh ./scripts/packaging.sh"
            }
        }
-       stage ('Build and Upload Docker Image') {
-           steps {
-               script {
-                   def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
-                   docker.withRegistry('', 'dockercred') {
-                       dockerImage.push()
-                   }
-                //    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
-               }
-           }
-       }
-       stage('Edit ChangeLog') {
-            steps {
-                script {
+//        stage ('Build and Upload Docker Image') {
+//            steps {
+//                script {
+//                    def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
+//                    docker.withRegistry('', 'dockercred') {
+//                        dockerImage.push()
+//                    }
+//                 //    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
+//                }
+//            }
+//        }
+//        stage('Edit ChangeLog') {
+//             steps {
+//                 script {
 
-                    def gitDomain = "${gitUrl}".tokenize('/')[0]
-                    def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: "tags/release-${prev_version}"],
-                            to: [type: 'REF', value: "tags/release-${version}"],
-                            template:
-"""
-  {{#tags}}
-# {{name}}
- {{#issues}}
+//                     def gitDomain = "${gitUrl}".tokenize('/')[0]
+//                     def changelogString = gitChangelog returnType: 'STRING',
+//                            from: [type: 'REF', value: "tags/release-${prev_version}"],
+//                             to: [type: 'REF', value: "tags/release-${version}"],
+//                             template:
+// """
+//   {{#tags}}
+// # {{name}}
+//  {{#issues}}
  
-     {{#ifContainsType commits type='feat'}}
-## Features
+//      {{#ifContainsType commits type='feat'}}
+// ## Features
 
-    {{#commits}}
-      {{#ifCommitType . type='feat'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='feat'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='mod'}}
-## Refactor
+//      {{#ifContainsType commits type='mod'}}
+// ## Refactor
 
-    {{#commits}}
-      {{#ifCommitType . type='mod'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='mod'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='fix'}}
-## Bug Fixes
+//      {{#ifContainsType commits type='fix'}}
+// ## Bug Fixes
 
-    {{#commits}}
-      {{#ifCommitType . type='fix'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='fix'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='etc'}}
-## OTHERS
+//      {{#ifContainsType commits type='etc'}}
+// ## OTHERS
 
-    {{#commits}}
-      {{#ifCommitType . type='etc'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='etc'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
- {{/issues}}
-{{/tags}}
-"""
-                    writeFile file: "tmp/CHANGELOG_new", text: changelogString
-                    currentBuild.description = changelogString
-                    sh "mv CHANGELOG.md tmp/tmpfile"
-                    sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
-                    sh "cat tmp/tmpfile >> CHANGELOG.md"
-                    sh "ls -al"
-                }
-            }
-        }
-        stage('Send Email') {
-            steps {
-                emailext (
-                        attachmentsPattern: 'CHANGELOG.md',
-                        subject: "[super-app-server] Release Notes - super-app-server:${version}",
-                        body:
-                                """
- 안녕하세요. ck1-2팀 김도현입니다.
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
+//  {{/issues}}
+// {{/tags}}
+// """
+//                     writeFile file: "tmp/CHANGELOG_new", text: changelogString
+//                     currentBuild.description = changelogString
+//                     sh "mv CHANGELOG.md tmp/tmpfile"
+//                     sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
+//                     sh "cat tmp/tmpfile >> CHANGELOG.md"
+//                     sh "ls -al"
+//                 }
+//             }
+//         }
+//         stage('Send Email') {
+//             steps {
+//                 emailext (
+//                         attachmentsPattern: 'CHANGELOG.md',
+//                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
+//                         body:
+//                                 """
+//  안녕하세요. ck1-2팀 김도현입니다.
 
-금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+// 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-${version}의 개선 및 추가된 사항은 첨부된 CHANGELOG.md 파일을 확인 부탁드립니다.
+// ${version}의 개선 및 추가된 사항은 첨부된 CHANGELOG.md 파일을 확인 부탁드립니다.
 
-===
+// ===
 
-Super-App-Server-0.0.8 버전부터는 기존 배포되던 주소의 Super-App-Server registry 에
-SASAdmin CLI client도 함께 배포됩니다.
+// Super-App-Server-0.0.8 버전부터는 기존 배포되던 주소의 Super-App-Server registry 에
+// SASAdmin CLI client도 함께 배포됩니다.
 
-SASAdmin client는 excutable jar 파일로, 'java -jar SASAdmin-0.0.8.jar MasterSAS_IP'와 같이 실행시켜 주시면 됩니다.
+// SASAdmin client는 excutable jar 파일로, 'java -jar SASAdmin-0.0.8.jar MasterSAS_IP'와 같이 실행시켜 주시면 됩니다.
 
-현재 Master-Worker 구조와 StandAlone 에서의 Client 를 통한 Service App 전송, 상태 조회 등을 지원하고 있으며
-지속적으로 Client 요청에 대한 서비스를 추가해 나갈 예정입니다.
+// 현재 Master-Worker 구조와 StandAlone 에서의 Client 를 통한 Service App 전송, 상태 조회 등을 지원하고 있으며
+// 지속적으로 Client 요청에 대한 서비스를 추가해 나갈 예정입니다.
 
-===
+// ===
 
-※ SuperApp 서비스 예제 프로젝트:
-http://gitlab.ck:10081/superobject/super-app-service-example
-해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
-super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+// ※ SuperApp 서비스 예제 프로젝트:
+// http://gitlab.ck:10081/superobject/super-app-service-example
+// 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+// super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
-구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
-http://gitlab.ck:10081/superobject/super-object/wikis/home
+// 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+// http://gitlab.ck:10081/superobject/super-object/wikis/home
 
-SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+// SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
-감사합니다.
-
-
-- 김도현 드림.
+// 감사합니다.
 
 
-※ SuperApp Server Runtime :
-http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+// - 김도현 드림.
 
-※ SuperApp Server Maven Repository :
-http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-※ SuperApp Server Project :
-http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+// ※ SuperApp Server Runtime :
+// http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
-※ gitlab.ck:10081 접속 방법 :
-Default DNS 192.168.1.150 로 설정
+// ※ SuperApp Server Maven Repository :
+// http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-""",
-                        to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; cqa1@tmax.co.kr;",
-                        // to: "dohyun_kim5@tmax.co.kr;",
-                        from: "dohyun_kim5@tmax.co.kr"
-                )
-            }
-        }
-        stage('Git Push') {
-            steps {
-                echo "pushing..."
-                script {
-                    commitMsg = "Release commit - version ${version}"
-                    sh "git add -A"
-                    sh "git commit -m \"${commitMsg}\" || true"
-                    sh "git remote rm origin"
-                    sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
-                    sh "git remote -v"
-                    sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
-                    sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
-                }
-            }
-        }
+// ※ SuperApp Server Project :
+// http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+
+// ※ gitlab.ck:10081 접속 방법 :
+// Default DNS 192.168.1.150 로 설정
+
+// """,
+//                         to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; cqa1@tmax.co.kr;",
+//                         // to: "dohyun_kim5@tmax.co.kr;",
+//                         from: "dohyun_kim5@tmax.co.kr"
+//                 )
+//             }
+//         }
+//         stage('Git Push') {
+//             steps {
+//                 echo "pushing..."
+//                 script {
+//                     commitMsg = "Release commit - version ${version}"
+//                     sh "git add -A"
+//                     sh "git commit -m \"${commitMsg}\" || true"
+//                     sh "git remote rm origin"
+//                     sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
+//                     sh "git remote -v"
+//                     sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
+//                     sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
+//                 }
+//             }
+//         }
         stage('Cleaning...') {
             steps {
                 echo "All work Done. Cleaning..."
