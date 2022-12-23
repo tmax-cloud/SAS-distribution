@@ -37,7 +37,6 @@ pipeline {
                 sh 'git fetch --all'
                script {
                    if ("${prev_version}" == "default") {
-                        // prev_version = version.tokenize('.')[0] + "." + version.tokenize('.')[1] + "." + (version.tokenize('.')[2].toInteger() -1.toInteger())
                         prev_version = sh(script:"sudo git describe --tags --abbrev=0", returnStdout: true).tokenize('-')[1]
                         echo "${prev_version}"
                    }
@@ -83,7 +82,7 @@ pipeline {
                    docker.withRegistry('', 'dockercred') {
                        dockerImage.push()
                    }
-                //    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
+                   sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
                }
            }
        }
@@ -187,11 +186,10 @@ ${version}의 개선 및 추가된 사항은 첨부된 CHANGELOG.md 파일을 �
 
 ===
 
-Super-App-Server-0.1.2 버전에서는 다음과 같은 기능이 추가되었습니다.
+Super-App-Server-0.1.3 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- NID(int) 기반으로 DB Schema 변경
-- 기존 0.1.1 버전 Bug Fix
-- WorkerSAS 재기동 시 Application 재배포
+- 기존 배포된 application delete 기능
+- 새로운 버전의 application upload와 새로운 버전의 application apply
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 에정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -228,7 +226,6 @@ Default DNS 192.168.1.150 로 설정
 
 """,
                         to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; cqa1@tmax.co.kr;",
-                        // to: "dohyun_kim5@tmax.co.kr;",
                         from: "dohyun_kim5@tmax.co.kr"
                 )
             }
