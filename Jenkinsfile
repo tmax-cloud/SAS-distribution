@@ -171,65 +171,69 @@ pipeline {
                 }
             }
        }
-//         stage('Send Email') {
-//             steps {
-//                 emailext (
-//                         attachmentsPattern: 'CHANGELOG.md',
-//                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
-//                         body:
-//                                 """
-//  안녕하세요. ck1-2팀 김도현입니다.
+        stage('Send Email') {
+            steps {
+                emailext (
+                        attachmentsPattern: 'CHANGELOG.md',
+                        subject: "[super-app-server] Release Notes - super-app-server:${version}",
+                        body:
+                                """
+ 안녕하세요. ck1-2팀 김도현입니다.
 
-// 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-// ${version}의 개선 및 추가된 사항은 첨부된 CHANGELOG.md 파일을 확인 부탁드립니다.
+${version}의 개선 및 추가된 사항은 첨부된 CHANGELOG.md 파일을 확인 부탁드립니다.
 
-// ===
+===
 
-// Super-App-Server-0.1.3 버전에서는 다음과 같은 기능이 추가되었습니다.
+Super-App-Server-0.1.4 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-// - 기존 배포된 application delete 기능
-// - 새로운 버전의 application upload와 새로운 버전의 application apply
+- SAS Admin DB schema 수정
+- 기존 SuperAppProtocolHandler decoder 를 SapServerCodec 으로 추출
+- Dto casting error bugfix
+- Service Timeout 기능 추가 (project wikis/2.-Developing-Service#2-servicetimeout 참고)
+- Application scaling 기능 추가
+- SAS 장애 발생 시 복구 기능 개선
 
-// 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 에정이오니
-// super-object Wiki를 참고해 주시면 감사하겠습니다.
+자세한 예시 코드 및 가이드를 Wiki에 업로드 할 에정이오니
+super-object Wiki를 참고해 주시면 감사하겠습니다.
 
-// ===
+===
 
-// ※ SuperApp 서비스 예제 프로젝트:
-// http://gitlab.ck:10081/superobject/super-app-service-example
-// 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
-// super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+※ SuperApp 서비스 예제 프로젝트:
+http://gitlab.ck:10081/superobject/super-app-service-example
+해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
-// 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
-// http://gitlab.ck:10081/superobject/super-object/wikis/home
+구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+http://gitlab.ck:10081/superobject/super-object/wikis/home
 
-// SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
-// 감사합니다.
-
-
-// - 김도현 드림.
+감사합니다.
 
 
-// ※ SuperApp Server Runtime :
-// http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+- 김도현 드림.
 
-// ※ SuperApp Server Maven Repository :
-// http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-// ※ SuperApp Server Project :
-// http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+※ SuperApp Server Runtime :
+http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
-// ※ gitlab.ck:10081 접속 방법 :
-// Default DNS 192.168.1.150 로 설정
+※ SuperApp Server Maven Repository :
+http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-// """,
-//                         to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; cqa1@tmax.co.kr;",
-//                         from: "dohyun_kim5@tmax.co.kr"
-//                 )
-//             }
-//         }
+※ SuperApp Server Project :
+http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+
+※ gitlab.ck:10081 접속 방법 :
+Default DNS 192.168.1.150 로 설정
+
+""",
+                        to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; cqa1@tmax.co.kr;",
+                        from: "dohyun_kim5@tmax.co.kr"
+                )
+            }
+        }
         stage('Git Push') {
             steps {
                 echo "pushing..."
