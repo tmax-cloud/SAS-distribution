@@ -194,10 +194,11 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - SAS Admin DB schema 수정
-- WebSocket SAP request 지원
-- DBCP - Dynamic DataSource StandAlone 모드 지원
-- SMS key filter 기능 추가
-- Application 삭제 시 버그 수정
+- WorkerPool 개념 도입
+- Application description 기능 추가
+- Sasctl request에 대한 응답 메세지 고도화
+- DataSource 동적 변경 응답 메세지 구체화
+- SMS value filter 기능 추가
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 에정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -228,6 +229,9 @@ http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-se
 
 ※ SuperApp Server Project :
 http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+
+※ SuperApp Server Container Image :
+hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 
 ※ gitlab.ck:10081 접속 방법 :
 Default DNS 192.168.1.150 로 설정
