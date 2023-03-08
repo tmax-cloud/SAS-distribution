@@ -194,11 +194,10 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - SAS Admin DB schema 수정
-- WorkerPool 개념 도입
-- Application description 기능 추가
-- Sasctl request에 대한 응답 메세지 고도화
-- DataSource 동적 변경 응답 메세지 구체화
-- SMS value filter 기능 추가
+- HTTP request 에 대해 서비스 수행 및 response 지원
+- Custom Gateway(Server mode) 지원 - Adapter, EndPoint
+- Binary 삭제 기능 추가
+- 일정 시간이 지나면 Worker Channel 분실되는 오류 수정
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 에정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
