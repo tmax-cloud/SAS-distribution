@@ -193,10 +193,8 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- Default project jdk version 1.8 -> 11 로 변경
-- SAS BaseOS 이미지 prolinux 로 변경
-- K8S 환경에서 HeapDump 사용 지원
-- Service Invocation Handler - StandAlone 모드 지원
+- SAP decoder / encoder 개선 (대용량 binary 전송 시간 단축)
+- TaskObject pipe refactoring
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 에정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
