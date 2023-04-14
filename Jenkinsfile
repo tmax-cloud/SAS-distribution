@@ -89,91 +89,91 @@ pipeline {
                }
            }
        }
-       stage('Edit ChangeLog') {
-            steps {
-                script {
+//        stage('Edit ChangeLog') {
+//             steps {
+//                 script {
 
-                    def gitDomain = "${gitUrl}".tokenize('/')[0]
-                    def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: "tags/release-${prev_version}"],
-                            to: [type: 'REF', value: "tags/release-${version}"],
-                            template:
-"""
-  {{#tags}}
-# {{name}}
- {{#issues}}
+//                     def gitDomain = "${gitUrl}".tokenize('/')[0]
+//                     def changelogString = gitChangelog returnType: 'STRING',
+//                            from: [type: 'REF', value: "tags/release-${prev_version}"],
+//                             to: [type: 'REF', value: "tags/release-${version}"],
+//                             template:
+// """
+//   {{#tags}}
+// # {{name}}
+//  {{#issues}}
  
-     {{#ifContainsType commits type='feat'}}
-## Features
+//      {{#ifContainsType commits type='feat'}}
+// ## Features
 
-    {{#commits}}
-      {{#ifCommitType . type='feat'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='feat'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='mod'}}
-## Refactor
+//      {{#ifContainsType commits type='mod'}}
+// ## Refactor
 
-    {{#commits}}
-      {{#ifCommitType . type='mod'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='mod'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='fix'}}
-## Bug Fixes
+//      {{#ifContainsType commits type='fix'}}
+// ## Bug Fixes
 
-    {{#commits}}
-      {{#ifCommitType . type='fix'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='fix'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='etc'}}
-## OTHERS
+//      {{#ifContainsType commits type='etc'}}
+// ## OTHERS
 
-    {{#commits}}
-      {{#ifCommitType . type='etc'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='etc'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
- {{/issues}}
-{{/tags}}
-"""
-                    writeFile file: "tmp/CHANGELOG_new", text: changelogString
-                    currentBuild.description = changelogString
-                    sh "mv CHANGELOG.md tmp/tmpfile"
-                    sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
-                    sh "cat tmp/tmpfile >> CHANGELOG.md"
-                    sh "ls -al"
-                }
-            }
-       }
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
+//  {{/issues}}
+// {{/tags}}
+// """
+//                     writeFile file: "tmp/CHANGELOG_new", text: changelogString
+//                     currentBuild.description = changelogString
+//                     sh "mv CHANGELOG.md tmp/tmpfile"
+//                     sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
+//                     sh "cat tmp/tmpfile >> CHANGELOG.md"
+//                     sh "ls -al"
+//                 }
+//             }
+//        }
 //         stage('Send Email') {
 //             steps {
 //                 emailext (
@@ -238,21 +238,21 @@ pipeline {
 //                 )
 //             }
 //         }
-        stage('Git Push') {
-            steps {
-                echo "pushing..."
-                script {
-                    commitMsg = "Release commit - version ${version}"
-                    sh "git add -A"
-                    sh "git commit -m \"${commitMsg}\" || true"
-                    sh "git remote rm origin"
-                    sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
-                    sh "git remote -v"
-                    sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
-                    sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
-                }
-            }
-        }
+        // stage('Git Push') {
+        //     steps {
+        //         echo "pushing..."
+        //         script {
+        //             commitMsg = "Release commit - version ${version}"
+        //             sh "git add -A"
+        //             sh "git commit -m \"${commitMsg}\" || true"
+        //             sh "git remote rm origin"
+        //             sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
+        //             sh "git remote -v"
+        //             sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
+        //             sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
+        //         }
+        //     }
+        // }
         stage('Cleaning...') {
             steps {
                 echo "All work Done. Cleaning..."
