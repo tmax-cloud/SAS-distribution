@@ -193,6 +193,13 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
+- WebSocket request / response 구분
+  Binary WS Frame 으로 들어온 request 에 대하여 Binary WS Frame 으로 response 생성하여 응답
+- Controller bugfix
+  Internal Controller 배포 간 버그 수정
+  StandAlone 모드로 External Controller 연결 시 SAS의 IP 주소 전달 정상화
+  Controller service 호출 시 service name 에 '/' 기호 포함 시 routing error 버그 수정
+
 Common
 - SAS admin ddl 변경 - transactions 테이블 컬럼 추가, xml_declaration 테이블 추가
 - context classLoader를 Invocation handler 메서드에서 접근 가능하도록 변경 (외부 dependency lib 참조 가능)
