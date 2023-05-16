@@ -174,91 +174,84 @@ pipeline {
                 }
             }
        }
-//         stage('Send Email') {
-//             steps {
-//                 emailext (
-//                         attachmentsPattern: 'CHANGELOG.md',
-//                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
-//                         body:
-//                                 """
-//  안녕하세요. ck1-2팀 김도현입니다.
+        stage('Send Email') {
+            steps {
+                emailext (
+                        attachmentsPattern: 'CHANGELOG.md',
+                        subject: "[super-app-server] Release Notes - super-app-server:${version}",
+                        body:
+                                """
+ 안녕하세요. ck1-2팀 김도현입니다.
 
-// 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-// ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
+${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
 
-// https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
+https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
 
-// ===
+===
 
-// Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
+Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-// - WebSocket request / response 구분
-//   Binary WS Frame 으로 들어온 request 에 대하여 Binary WS Frame 으로 response 생성하여 응답
-// - Controller bugfix
-//   Internal Controller 배포 간 버그 수정
-//   StandAlone 모드로 External Controller 연결 시 SAS의 IP 주소 전달 정상화
-//   Controller service 호출 시 service name 에 '/' 기호 포함 시 routing error 버그 수정
+Common
+- TaskObject executor chooser 로직 개선
+- Timeout TaskObject run - thread pool *runtime_manager* 로 스레드 분리
+- DslJson - code gen 기반 converter를 사용하여 dto serialize / deserialize 수행
+- decoder / encoder exception handling 버그 수정
 
-// Common
-// - SAS admin ddl 변경 - transactions 테이블 컬럼 추가, xml_declaration 테이블 추가
-// - context classLoader를 Invocation handler 메서드에서 접근 가능하도록 변경 (외부 dependency lib 참조 가능)
-// - SAS Exception handling 모듈 추가 및 exception 관리 통합
-// - StandAlone 모드에서 ChangeDataSource 실행 오류 해결
+DBCP
+- commit / rollback 자동화를 위한 로직 수정
+- 32개의 dbcp 설정 지원 및 다중버전 application 대응
 
-// Custom Gateway
-// - http custom mapper 기능 추가
-// - http get 기능 추가
-// - http post xml message mapping 기능 추가
-// - message parsing 오류 시 error return 기능 추가
-
-// Super App Gateway
-// - checkDBData 로직 추가
-// - SAG 재연결 대기 시간 30초로 수정
-// - SAG 채널 inactivate 시 재연결 & gateway 삭제 로직 추가
-
-// 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 에정이오니
-// super-object Wiki를 참고해 주시면 감사하겠습니다.
-
-// ===
-
-// ※ SuperApp 서비스 예제 프로젝트:
-// http://gitlab.ck:10081/superobject/super-app-service-example
-// 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
-// super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
-
-// 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
-// http://gitlab.ck:10081/superobject/super-object/wikis/home
-
-// SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
-
-// 감사합니다.
+Custom Gateway
+- TLS 기반의 HTTPS client 지원
+- Custom G/W 전용 worker pool id 지정 기능 제공
+- HTTP 헤더 (Content-Encoding, Accept-Encoding) 압축 및 압축 해제 지원
+- EndPoint 배포 config field 명 수정 (servierIp → serverHost)
 
 
-// - 김도현 드림.
+자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
+super-object Wiki를 참고해 주시면 감사하겠습니다.
+
+===
+
+※ SuperApp 서비스 예제 프로젝트:
+http://gitlab.ck:10081/superobject/super-app-service-example
+해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+
+구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+http://gitlab.ck:10081/superobject/super-object/wikis/home
+
+SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+
+감사합니다.
 
 
-// ※ SuperApp Server Runtime :
-// http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+- 김도현 드림.
 
-// ※ SuperApp Server Maven Repository :
-// http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-// ※ SuperApp Server Project :
-// http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+※ SuperApp Server Runtime :
+http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
-// ※ SuperApp Server Container Image :
-// hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+※ SuperApp Server Maven Repository :
+http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-// ※ gitlab.ck:10081 접속 방법 :
-// Default DNS 192.168.1.150 로 설정
+※ SuperApp Server Project :
+http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
 
-// """,
-//                         to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; ck3_lab@tmax.co.kr; cqa1@tmax.co.kr;",
-//                         from: "dohyun_kim5@tmax.co.kr"
-//                 )
-//             }
-//         }
+※ SuperApp Server Container Image :
+hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+
+※ gitlab.ck:10081 접속 방법 :
+Default DNS 192.168.1.150 로 설정
+
+""",
+                        to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; ck3_lab@tmax.co.kr; cqa1@tmax.co.kr;",
+                        from: "dohyun_kim5@tmax.co.kr"
+                )
+            }
+        }
         stage('Git Push') {
             steps {
                 echo "pushing..."
