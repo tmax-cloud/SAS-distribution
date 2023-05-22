@@ -252,21 +252,21 @@ pipeline {
 //                 )
 //             }
         // }
-        stage('Git Push') {
-            steps {
-                echo "pushing..."
-                script {
-                    commitMsg = "Release commit - version ${version}"
-                    sh "git add -A"
-                    sh "git commit -m \"${commitMsg}\" || true"
-                    sh "git remote rm origin"
-                    sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
-                    sh "git remote -v"
-                    sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
-                    sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
-                }
-            }
-        }
+        // stage('Git Push') {
+        //     steps {
+        //         echo "pushing..."
+        //         script {
+        //             commitMsg = "Release commit - version ${version}"
+        //             sh "git add -A"
+        //             sh "git commit -m \"${commitMsg}\" || true"
+        //             sh "git remote rm origin"
+        //             sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
+        //             sh "git remote -v"
+        //             sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
+        //             sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
+        //         }
+        //     }
+        // }
         stage('Cleaning...') {
             steps {
                 echo "All work Done. Cleaning..."
