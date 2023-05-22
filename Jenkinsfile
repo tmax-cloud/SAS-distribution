@@ -89,91 +89,91 @@ pipeline {
                }
            }
        }
-       stage('Edit ChangeLog') {
-            steps {
-                script {
+//        stage('Edit ChangeLog') {
+//             steps {
+//                 script {
 
-                    def gitDomain = "${gitUrl}".tokenize('/')[0]
-                    def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: "tags/release-${prev_version}"],
-                            to: [type: 'REF', value: "tags/release-${version}"],
-                            template:
-"""
-  {{#tags}}
-# {{name}}
- {{#issues}}
+//                     def gitDomain = "${gitUrl}".tokenize('/')[0]
+//                     def changelogString = gitChangelog returnType: 'STRING',
+//                            from: [type: 'REF', value: "tags/release-${prev_version}"],
+//                             to: [type: 'REF', value: "tags/release-${version}"],
+//                             template:
+// """
+//   {{#tags}}
+// # {{name}}
+//  {{#issues}}
  
-     {{#ifContainsType commits type='feat'}}
-## Features
+//      {{#ifContainsType commits type='feat'}}
+// ## Features
 
-    {{#commits}}
-      {{#ifCommitType . type='feat'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='feat'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='mod'}}
-## Refactor
+//      {{#ifContainsType commits type='mod'}}
+// ## Refactor
 
-    {{#commits}}
-      {{#ifCommitType . type='mod'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='mod'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='fix'}}
-## Bug Fixes
+//      {{#ifContainsType commits type='fix'}}
+// ## Bug Fixes
 
-    {{#commits}}
-      {{#ifCommitType . type='fix'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='fix'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='etc'}}
-## OTHERS
+//      {{#ifContainsType commits type='etc'}}
+// ## OTHERS
 
-    {{#commits}}
-      {{#ifCommitType . type='etc'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='etc'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
- {{/issues}}
-{{/tags}}
-"""
-                    writeFile file: "tmp/CHANGELOG_new", text: changelogString
-                    currentBuild.description = changelogString
-                    sh "mv CHANGELOG.md tmp/tmpfile"
-                    sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
-                    sh "cat tmp/tmpfile >> CHANGELOG.md"
-                    sh "ls -al"
-                }
-            }
-       }
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
+//  {{/issues}}
+// {{/tags}}
+// """
+//                     writeFile file: "tmp/CHANGELOG_new", text: changelogString
+//                     currentBuild.description = changelogString
+//                     sh "mv CHANGELOG.md tmp/tmpfile"
+//                     sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
+//                     sh "cat tmp/tmpfile >> CHANGELOG.md"
+//                     sh "ls -al"
+//                 }
+//             }
+//        }
 //         stage('Send Email') {
 //             steps {
 //                 emailext (
@@ -193,22 +193,12 @@ pipeline {
 
 // Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-// Common
-// - TaskObject executor chooser 로직 개선
-// - Timeout TaskObject run - thread pool *runtime_manager* 로 스레드 분리
-// - DslJson - code gen 기반 converter를 사용하여 dto serialize / deserialize 수행
-// - decoder / encoder exception handling 버그 수정
+// reloadClassLoader - thread synchronized 로 변경
+// - scanner thread_num 1로 고정, system.gc() 호출로 memory 점유 이상 현상 해결
 
-// DBCP
-// - commit / rollback 자동화를 위한 로직 수정
-// - 32개의 dbcp 설정 지원 및 다중버전 application 대응
-
-// Custom Gateway
-// - TLS 기반의 HTTPS client 지원
-// - Custom G/W 전용 worker pool id 지정 기능 제공
-// - HTTP 헤더 (Content-Encoding, Accept-Encoding) 압축 및 압축 해제 지원
-// - EndPoint 배포 config field 명 수정 (servierIp → serverHost)
-
+// ServletSASHandler, DispatcherServletInitializer 추가
+// - 환경변수 `INCLUDE_SPRING=true`로 지정 시 DispatcherServlet 생성
+// - StandAlone 모드에서 HTTP spring service call 지원
 
 // 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 // super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -251,22 +241,22 @@ pipeline {
 //                         from: "dohyun_kim5@tmax.co.kr"
 //                 )
 //             }
-        // }
-        // stage('Git Push') {
-        //     steps {
-        //         echo "pushing..."
-        //         script {
-        //             commitMsg = "Release commit - version ${version}"
-        //             sh "git add -A"
-        //             sh "git commit -m \"${commitMsg}\" || true"
-        //             sh "git remote rm origin"
-        //             sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
-        //             sh "git remote -v"
-        //             sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
-        //             sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
-        //         }
-        //     }
-        // }
+//         }
+        stage('Git Push') {
+            steps {
+                echo "pushing..."
+                script {
+                    commitMsg = "Release commit - version ${version}"
+                    sh "git add -A"
+                    sh "git commit -m \"${commitMsg}\" || true"
+                    sh "git remote rm origin"
+                    sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
+                    sh "git remote -v"
+                    sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
+                    sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
+                }
+            }
+        }
         stage('Cleaning...') {
             steps {
                 echo "All work Done. Cleaning..."
