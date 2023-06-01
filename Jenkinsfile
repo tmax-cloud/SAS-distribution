@@ -193,9 +193,19 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- Outbound Service 호출 시 메모리 누수 해결
-- Nested Service 호출 시 메모리 누수 해결
-- StandAlone - INCLUDE_SPRING 모드에서 ClassCastingError 해결
+- Common
+    javascript - Promise.race() 처럼 동작하는 AbstractServiceObject - `getReplyAny()` 추가
+    (return MessageObject)
+    javascript - Promise.all() 처럼 동작하는 AbstractServiceObject - `getReplyAll()` 추가
+    (return List<MessageObject>)
+- Spring
+    servlet service를 worker thread에서 실행하도록 sas admin service로 wrapping
+    → 기존의 EM thread blocking 해결
+    Thymeleaf View Resolver 추가
+    Filter 추가
+    Spring app 동적 배포를 위한 servlet init 로직 변경
+- Custom Gateway
+    Self-signed 기반 TLS 서버 지원
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
