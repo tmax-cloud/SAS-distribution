@@ -193,19 +193,18 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- Common
-    javascript - Promise.race() 처럼 동작하는 AbstractServiceObject - `getReplyAny()` 추가
-    (return MessageObject)
-    javascript - Promise.all() 처럼 동작하는 AbstractServiceObject - `getReplyAll()` 추가
-    (return List<MessageObject>)
-- Spring
-    servlet service를 worker thread에서 실행하도록 sas admin service로 wrapping
-    → 기존의 EM thread blocking 해결
-    Thymeleaf View Resolver 추가
-    Filter 추가
-    Spring app 동적 배포를 위한 servlet init 로직 변경
-- Custom Gateway
-    Self-signed 기반 TLS 서버 지원
+- **Common**
+    - Application / Binary DB schema 변경 - App과 Binary를 독립적으로 분리, Application 배포 시 binary, datasource, worker_pool_id 선택하여 배포
+    AppName 별도로 지정 (default = BinaryName)
+    - Master - Worker 구조에서 SAS service http route 지원
+    - SAS service 내부에서 service timeout 재설정 지원
+- **SuperAppGateway 연동**
+    - SAG - http2 요청에 대한 SAS service 동작 지원
+- **Spring**
+    - 다중 spring app 에 대한 다중 dispatcherServlet 동작 지원
+    - SAG - http2 요청에 대한 Servlet service 동작 지원
+- **Custom Gateway**
+    - Client random port 지정 기능 추가
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
