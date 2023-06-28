@@ -89,180 +89,180 @@ pipeline {
                }
            }
        }
-       stage('Edit ChangeLog') {
-            steps {
-                script {
+//        stage('Edit ChangeLog') {
+//             steps {
+//                 script {
 
-                    def gitDomain = "${gitUrl}".tokenize('/')[0]
-                    def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: "tags/release-${prev_version}"],
-                            to: [type: 'REF', value: "tags/release-${version}"],
-                            template:
-"""
-  {{#tags}}
-# {{name}}
- {{#issues}}
+//                     def gitDomain = "${gitUrl}".tokenize('/')[0]
+//                     def changelogString = gitChangelog returnType: 'STRING',
+//                            from: [type: 'REF', value: "tags/release-${prev_version}"],
+//                             to: [type: 'REF', value: "tags/release-${version}"],
+//                             template:
+// """
+//   {{#tags}}
+// # {{name}}
+//  {{#issues}}
  
-     {{#ifContainsType commits type='feat'}}
-## Features
+//      {{#ifContainsType commits type='feat'}}
+// ## Features
 
-    {{#commits}}
-      {{#ifCommitType . type='feat'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='feat'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='mod'}}
-## Refactor
+//      {{#ifContainsType commits type='mod'}}
+// ## Refactor
 
-    {{#commits}}
-      {{#ifCommitType . type='mod'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='mod'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='fix'}}
-## Bug Fixes
+//      {{#ifContainsType commits type='fix'}}
+// ## Bug Fixes
 
-    {{#commits}}
-      {{#ifCommitType . type='fix'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='fix'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='etc'}}
-## OTHERS
+//      {{#ifContainsType commits type='etc'}}
+// ## OTHERS
 
-    {{#commits}}
-      {{#ifCommitType . type='etc'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='etc'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
- {{/issues}}
-{{/tags}}
-"""
-                    writeFile file: "tmp/CHANGELOG_new", text: changelogString
-                    currentBuild.description = changelogString
-                    sh "mv CHANGELOG.md tmp/tmpfile"
-                    sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
-                    sh "cat tmp/tmpfile >> CHANGELOG.md"
-                    sh "ls -al"
-                }
-            }
-       }
-        stage('Send Email') {
-            steps {
-                emailext (
-                        attachmentsPattern: 'CHANGELOG.md',
-                        subject: "[super-app-server] Release Notes - super-app-server:${version}",
-                        body:
-                                """
- 안녕하세요. ck1-2팀 김도현입니다.
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
+//  {{/issues}}
+// {{/tags}}
+// """
+//                     writeFile file: "tmp/CHANGELOG_new", text: changelogString
+//                     currentBuild.description = changelogString
+//                     sh "mv CHANGELOG.md tmp/tmpfile"
+//                     sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
+//                     sh "cat tmp/tmpfile >> CHANGELOG.md"
+//                     sh "ls -al"
+//                 }
+//             }
+//        }
+//         stage('Send Email') {
+//             steps {
+//                 emailext (
+//                         attachmentsPattern: 'CHANGELOG.md',
+//                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
+//                         body:
+//                                 """
+//  안녕하세요. ck1-2팀 김도현입니다.
 
-금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+// 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
+// ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
 
-https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
+// https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
 
-===
+// ===
 
-Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
+// Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - Application / Binary DB schema 변경 - App과 Binary를 독립적으로 분리, Application 배포 시 binary, datasource, worker_pool_id 선택하여 배포
-    AppName 별도로 지정 (default = BinaryName)
-    - Master - Worker 구조에서 SAS service http route 지원
-    - SAS service 내부에서 service timeout 재설정 지원
-- **SuperAppGateway 연동**
-    - SAG - http2 요청에 대한 SAS service 동작 지원
-- **Spring**
-    - 다중 spring app 에 대한 다중 dispatcherServlet 동작 지원
-    - SAG - http2 요청에 대한 Servlet service 동작 지원
-- **Custom Gateway**
-    - Client random port 지정 기능 추가
+// - **Common**
+//     - Application / Binary DB schema 변경 - App과 Binary를 독립적으로 분리, Application 배포 시 binary, datasource, worker_pool_id 선택하여 배포
+//     AppName 별도로 지정 (default = BinaryName)
+//     - Master - Worker 구조에서 SAS service http route 지원
+//     - SAS service 내부에서 service timeout 재설정 지원
+// - **SuperAppGateway 연동**
+//     - SAG - http2 요청에 대한 SAS service 동작 지원
+// - **Spring**
+//     - 다중 spring app 에 대한 다중 dispatcherServlet 동작 지원
+//     - SAG - http2 요청에 대한 Servlet service 동작 지원
+// - **Custom Gateway**
+//     - Client random port 지정 기능 추가
 
-자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
-super-object Wiki를 참고해 주시면 감사하겠습니다.
+// 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
+// super-object Wiki를 참고해 주시면 감사하겠습니다.
 
-===
+// ===
 
-※ SuperApp 서비스 예제 프로젝트:
-http://gitlab.ck:10081/superobject/super-app-service-example
-해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
-super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+// ※ SuperApp 서비스 예제 프로젝트:
+// http://gitlab.ck:10081/superobject/super-app-service-example
+// 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+// super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
-구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
-http://gitlab.ck:10081/superobject/super-object/wikis/home
+// 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+// http://gitlab.ck:10081/superobject/super-object/wikis/home
 
-SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+// SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
-감사합니다.
-
-
-- 김도현 드림.
+// 감사합니다.
 
 
-※ SuperApp Server Runtime :
-http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+// - 김도현 드림.
 
-※ SuperApp Server Maven Repository :
-http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-※ SuperApp Server Project :
-http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+// ※ SuperApp Server Runtime :
+// http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
-※ SuperApp Server Container Image :
-hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+// ※ SuperApp Server Maven Repository :
+// http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-※ gitlab.ck:10081 접속 방법 :
-Default DNS 192.168.1.150 로 설정
+// ※ SuperApp Server Project :
+// http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
 
-""",
-                        to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; ck3_lab@tmax.co.kr; cqa1@tmax.co.kr;",
-                        from: "dohyun_kim5@tmax.co.kr"
-                )
-            }
-        }
-        stage('Git Push') {
-            steps {
-                echo "pushing..."
-                script {
-                    commitMsg = "Release commit - version ${version}"
-                    sh "git add -A"
-                    sh "git commit -m \"${commitMsg}\" || true"
-                    sh "git remote rm origin"
-                    sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
-                    sh "git remote -v"
-                    sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
-                    sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
-                }
-            }
-        }
+// ※ SuperApp Server Container Image :
+// hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+
+// ※ gitlab.ck:10081 접속 방법 :
+// Default DNS 192.168.1.150 로 설정
+
+// """,
+//                         to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; ck3_lab@tmax.co.kr; cqa1@tmax.co.kr;",
+//                         from: "dohyun_kim5@tmax.co.kr"
+//                 )
+//             }
+//         }
+//         stage('Git Push') {
+//             steps {
+//                 echo "pushing..."
+//                 script {
+//                     commitMsg = "Release commit - version ${version}"
+//                     sh "git add -A"
+//                     sh "git commit -m \"${commitMsg}\" || true"
+//                     sh "git remote rm origin"
+//                     sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
+//                     sh "git remote -v"
+//                     sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
+//                     sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
+//                 }
+//             }
+//         }
         stage('Cleaning...') {
             steps {
                 echo "All work Done. Cleaning..."
