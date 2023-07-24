@@ -194,6 +194,7 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - **Common**
+<<<<<<< HEAD
     - SAS Default-service-path 변경
     StandAlone 모드로 기동 시 기존 `./` 였던 service path가 `./application/` 하위로 변경됨
     App jar를 application directory에 넣고 SAS 기동
@@ -206,6 +207,21 @@ Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되
     - WorkerSAS 재기동 시, DBCP 재배포 자동화
     - Datasource 인자가 없는 application에 대해 update 요청 시, 연결된 datasource 정보 삭제
     - `sasctl get datasource (--all)` 버그 수정
+=======
+    - SAS service - dependency library 분리, 배포할 수 있도록 구조 변경
+    (`./shared/libs` 하위에 dependency jar 위치)
+    - Library 업로드 및 조회 기능 추가
+    - SAS Admin service 가 아닌 일반 서비스 호출시에도 response(byteBuffer)로 오는 Binary를 파일로 저장할 수 있도록 기능 추가 (sasctl apply command)
+- **Spring**
+    - MockServletContext를 상속한 SASServletContext 클래스 추가
+    - DispatcherServlet 생성 과정 및 filter 추가 리팩토링
+    - `ApplicationReadyEvent(), ApplicationStartedEvent(), ContextStartedEvent()` 정상화
+- **Http Support**
+    - http 파싱 에러 발생 시 `BAD_REQUEST` 혹은 `RST_STREAM(HTTP/2)`를 응답으로 보내는 로직 추가
+- **Router**
+    - Custom Routing Rule 적용 기능 구현  
+    http://192.168.1.150:10081/superobject/super-object/wikis/2.2.-Using-Custom-Routing-Rule
+>>>>>>> 3dd0ecc (release-0.2.7)
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
