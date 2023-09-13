@@ -174,90 +174,74 @@ pipeline {
                 }
             }
        }
-//         stage('Send Email') {
-//             steps {
-//                 emailext (
-//                         attachmentsPattern: 'CHANGELOG.md',
-//                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
-//                         body:
-//                                 """
-//  안녕하세요. ck1-2팀 김도현입니다.
+        stage('Send Email') {
+            steps {
+                emailext (
+                        attachmentsPattern: 'CHANGELOG.md',
+                        subject: "[super-app-server] Release Notes - super-app-server:${version}",
+                        body:
+                                """
+ 안녕하세요. ck1-2팀 김도현입니다.
 
-// 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-// ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
+${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
 
-// https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
+https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
 
-// ===
+===
 
-// Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
+Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-// - **Common**
-//     - Docker-Compose yaml 추가
-//     - getReply 버그 수정 - callAsync 수행 시 awake 로직 정상화
-//     - Application 별 ClassLoader 생성
-//         - App loading 시 app 별 classLoader를 저장, TaskObject 에서 서비스 수행시 해당 classLoader 전달
-//     - DB 이중화 지원
-//     - HTTP CORS 관련 필요한 http header를 SAP의 가변헤더로 받아 response에 넣도록 변경
-//     - StandBy Master의 Active Master DB check 시간을 Active Master의 DB update 시간의 두배로 설정
-//         - ENV `STANDBY_MASTER_DB_CHECK_TIME` 삭제
-//     - SAG의 재연결 대기시간 10분으로 변경
-//     - CMS 메서드에서 sessionIdList를 JsonObject로 사용할 경우에도 대응 가능하도록 변경
-//         - http://192.168.1.150:10081/superobject/super-object/wikis/3.3.-Using-CMS-Sample-Code
-// - **SASCTL**
-//     - Get RoutingInfo 기능 추가 (SAG url routing 정보 DB 조회)
-//     - Error 발생 여부에 따라 System.exit() code 변경
-// - **Router**
-//     - Active-Standby로 배포된 application의 Active Worker이 Master와 연결이 끊어졌을 때, 즉시 Active Worker를 새로 선정하도록 변경
-// - **BugFix**
-//     - Custom Routing Rule 관련 변경 / 삭제 서비스의 버그 해결
-//     - Worker 재연결 후 RoutingMap 관련 버그 해결
-//     - 동일 서비스가 존재하는 app 배포 시 문제 발생하는 버그 해결
-//     Application update 정상 수행
+- ControllerServiceObject → `deprecated` 로 변경 (추후 삭제 예정)
+- 외부 Dependency 를 사용하는 app jar 로딩 시 버그 수정
+    - wrapper class 를 사용 가능하도록 구조 변경하면서 
+    ScanResult의 모든 class를 loading하면서 발생한 문제 해결
+- DbcpConfiguration 인식 오류 버그 수정
+- Controller 재배포시 db insert 오류 수정
 
-// 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
-// super-object Wiki를 참고해 주시면 감사하겠습니다.
+자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
+super-object Wiki를 참고해 주시면 감사하겠습니다.
 
-// ===
+===
 
-// ※ SuperApp 서비스 예제 프로젝트:
-// http://gitlab.ck:10081/superobject/super-app-service-example
-// 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
-// super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+※ SuperApp 서비스 예제 프로젝트:
+http://gitlab.ck:10081/superobject/super-app-service-example
+해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
-// 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
-// http://gitlab.ck:10081/superobject/super-object/wikis/home
+구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+http://gitlab.ck:10081/superobject/super-object/wikis/home
 
-// SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
-// 감사합니다.
+감사합니다.
 
 
-// - 김도현 드림.
+- 김도현 드림.
 
 
-// ※ SuperApp Server Runtime :
-// http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+※ SuperApp Server Runtime :
+http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
-// ※ SuperApp Server Maven Repository :
-// http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
+※ SuperApp Server Maven Repository :
+http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-// ※ SuperApp Server Project :
-// http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+※ SuperApp Server Project :
+http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
 
-// ※ SuperApp Server Container Image :
-// hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+※ SuperApp Server Container Image :
+hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 
-// ※ gitlab.ck:10081 접속 방법 :
-// Default DNS 192.168.1.150 로 설정
+※ gitlab.ck:10081 접속 방법 :
+Default DNS 192.168.1.150 로 설정
 
-// """,
-//                         to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; ck3_lab@tmax.co.kr; cqa1@tmax.co.kr;",
-//                         from: "dohyun_kim5@tmax.co.kr"
-//                 )
-//             }
-//         }
+""",
+                        to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; ck3_lab@tmax.co.kr; cqa1@tmax.co.kr;",
+                        from: "dohyun_kim5@tmax.co.kr"
+                )
+            }
+        }
         stage('Git Push') {
             steps {
                 echo "pushing..."
