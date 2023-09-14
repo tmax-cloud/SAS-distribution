@@ -237,7 +237,7 @@ hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 Default DNS 192.168.1.150 로 설정
 
 """,
-                        to: "dohyun_kim5@tmax.co.kr; ck1@tmax.co.kr; ck2@tmax.co.kr; ck3@tmax.co.kr; ck3_lab@tmax.co.kr; cqa1@tmax.co.kr;",
+                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
                         from: "dohyun_kim5@tmax.co.kr"
                 )
             }
