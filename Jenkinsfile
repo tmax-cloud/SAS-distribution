@@ -46,14 +46,14 @@ pipeline {
                        sh "git checkout -b release-${version}"
                        commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                        commitId = commitId.substring(1)
-                       tagName = "release-${version}"
+                       tagName = "tag-release-${version}"
                        sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    } else {
                        echo "****************************************${gitBranch}!***********************************"
                        commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                        commitId = commitId.substring(1)
-                       tagName = "release-${version}"
-                      //  sh "git tag -a ${tagName} -m 'Version ${version} update'"
+                       tagName = "tag-release-${version}"
+                       sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    }
                }
             }
@@ -95,8 +95,8 @@ pipeline {
 
                     def gitDomain = "${gitUrl}".tokenize('/')[0]
                     def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: "tags/release-${prev_version}"],
-                            to: [type: 'REF', value: "tags/release-${version}"],
+                           from: [type: 'REF', value: "tags/tag-release-${prev_version}"],
+                            to: [type: 'REF', value: "tags/tag-release-${version}"],
                             template:
 """
   {{#tags}}
