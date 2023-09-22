@@ -46,13 +46,13 @@ pipeline {
                        sh "git checkout -b release-${version}"
                        commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                        commitId = commitId.substring(1)
-                       tagName = "tag-release-${version}"
+                       tagName = "release-v${version}"
                        sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    } else {
                        echo "****************************************${gitBranch}!***********************************"
                        commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                        commitId = commitId.substring(1)
-                       tagName = "tag-release-${version}"
+                       tagName = "release-v${version}"
                        sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    }
                }
@@ -96,7 +96,7 @@ pipeline {
                     def gitDomain = "${gitUrl}".tokenize('/')[0]
                     def changelogString = gitChangelog returnType: 'STRING',
                            from: [type: 'REF', value: "tags/tag-release-${prev_version}"],
-                            to: [type: 'REF', value: "tags/tag-release-${version}"],
+                            to: [type: 'REF', value: "tags/release-v${version}"],
                             template:
 """
   {{#tags}}
@@ -174,87 +174,87 @@ pipeline {
                 }
             }
        }
-        stage('Send Email') {
-            steps {
-                emailext (
-                        attachmentsPattern: 'CHANGELOG.md',
-                        subject: "[super-app-server] Release Notes - super-app-server:${version}",
-                        body:
-                                """
- 안녕하세요. ck1-2팀 김도현입니다.
+//         stage('Send Email') {
+//             steps {
+//                 emailext (
+//                         attachmentsPattern: 'CHANGELOG.md',
+//                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
+//                         body:
+//                                 """
+//  안녕하세요. ck1-2팀 김도현입니다.
 
-금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+// 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
+// ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
 
-https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
+// https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
 
-===
+// ===
 
-Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
+// Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - ServiceFactory refactoring
-    - 동일 워커풀에 서로 다른 appName에 다른 형상의 동일한 service-class-package 존재할 경우 서비스 호출 지원
-    - Error Response 고도화
-        - 서비스 로직에서 `throw new SASE` 시 detailMessage 추가 가능
-        - makeResponseFromError 메서드 삭제 → TaskObject.run()자체에서 일괄적으로 response throw
-    - DeleteBinary Bugfix - BinaryAppNameMap 객체 삭제 로직 정상화
-    - AppClassLoader refactoring - result.getAllClasses() → result.getSubclasses() revert
-- **Controller**
-    - External Controller 채널 연결 구조 개선
-- **DBCP**
-    - Master DBCP 기본 설정 변경 및 `env` 적용 지원
-    - 최대 허용 가능한 커넥션 수 `DBCP_MAX_TOTAL`  (default: 100)
-    - 쿼리 타임 아웃 180초 `DBCP_DEFAULT_QUERY_TIMEOUT_SECONDS` (default: 180s)
-    - 사용 가능한 커넥션 대기시간 `DBCP_MAX_WAIT_MILLIS` (default: 15000ms)
-    - 유휴 커넥션 삭제 주기 `DBCP_MIN_EVICTABLE_IDLE_TIME_MILLIS` (default: 180000ms)
-- **SMS**(**ServerMessageService)**
-    - SMS 구조 변경 (SAS WIKI 5.2)
-    [http://192.168.1.150:10081/superobject/super-object/wikis/5.2-SMS-사용하기](http://192.168.1.150:10081/superobject/super-object/wikis/5.2-SMS-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
+// - **Common**
+//     - ServiceFactory refactoring
+//     - 동일 워커풀에 서로 다른 appName에 다른 형상의 동일한 service-class-package 존재할 경우 서비스 호출 지원
+//     - Error Response 고도화
+//         - 서비스 로직에서 `throw new SASE` 시 detailMessage 추가 가능
+//         - makeResponseFromError 메서드 삭제 → TaskObject.run()자체에서 일괄적으로 response throw
+//     - DeleteBinary Bugfix - BinaryAppNameMap 객체 삭제 로직 정상화
+//     - AppClassLoader refactoring - result.getAllClasses() → result.getSubclasses() revert
+// - **Controller**
+//     - External Controller 채널 연결 구조 개선
+// - **DBCP**
+//     - Master DBCP 기본 설정 변경 및 `env` 적용 지원
+//     - 최대 허용 가능한 커넥션 수 `DBCP_MAX_TOTAL`  (default: 100)
+//     - 쿼리 타임 아웃 180초 `DBCP_DEFAULT_QUERY_TIMEOUT_SECONDS` (default: 180s)
+//     - 사용 가능한 커넥션 대기시간 `DBCP_MAX_WAIT_MILLIS` (default: 15000ms)
+//     - 유휴 커넥션 삭제 주기 `DBCP_MIN_EVICTABLE_IDLE_TIME_MILLIS` (default: 180000ms)
+// - **SMS**(**ServerMessageService)**
+//     - SMS 구조 변경 (SAS WIKI 5.2)
+//     [http://192.168.1.150:10081/superobject/super-object/wikis/5.2-SMS-사용하기](http://192.168.1.150:10081/superobject/super-object/wikis/5.2-SMS-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
 
-자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
-super-object Wiki를 참고해 주시면 감사하겠습니다.
+// 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
+// super-object Wiki를 참고해 주시면 감사하겠습니다.
 
-===
+// ===
 
-※ SuperApp 서비스 예제 프로젝트:
-http://gitlab.ck:10081/superobject/super-app-service-example
-해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
-super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+// ※ SuperApp 서비스 예제 프로젝트:
+// http://gitlab.ck:10081/superobject/super-app-service-example
+// 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+// super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
-구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
-http://gitlab.ck:10081/superobject/super-object/wikis/home
+// 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+// http://gitlab.ck:10081/superobject/super-object/wikis/home
 
-SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+// SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
-감사합니다.
-
-
-- 김도현 드림.
+// 감사합니다.
 
 
-※ SuperApp Server Runtime :
-http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+// - 김도현 드림.
 
-※ SuperApp Server Maven Repository :
-http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-※ SuperApp Server Project :
-http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+// ※ SuperApp Server Runtime :
+// http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
-※ SuperApp Server Container Image :
-hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+// ※ SuperApp Server Maven Repository :
+// http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-※ gitlab.ck:10081 접속 방법 :
-Default DNS 192.168.1.150 로 설정
+// ※ SuperApp Server Project :
+// http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
 
-""",
-                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
-                        from: "dohyun_kim5@tmax.co.kr"
-                )
-            }
-        }
+// ※ SuperApp Server Container Image :
+// hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+
+// ※ gitlab.ck:10081 접속 방법 :
+// Default DNS 192.168.1.150 로 설정
+
+// """,
+//                         to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+//                         from: "dohyun_kim5@tmax.co.kr"
+//                 )
+//             }
+//         }
         stage('Git Push') {
             steps {
                 echo "pushing..."
