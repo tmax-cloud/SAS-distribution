@@ -37,7 +37,7 @@ pipeline {
                 sh 'git fetch --all'
                script {
                    if ("${prev_version}" == "default") {
-                        prev_version = sh(script:"sudo git describe --tags --abbrev=0", returnStdout: true).tokenize('-')[2]
+                        prev_version = sh(script:"sudo git describe --tags --abbrev=0", returnStdout: true).tokenize('-')[1].replace("v","")
                         echo "${prev_version}"
                    }
 
@@ -95,7 +95,7 @@ pipeline {
 
                     def gitDomain = "${gitUrl}".tokenize('/')[0]
                     def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: "tags/tag-release-${prev_version}"],
+                           from: [type: 'REF', value: "tags/release-v${prev_version}"],
                             to: [type: 'REF', value: "tags/release-v${version}"],
                             template:
 """
