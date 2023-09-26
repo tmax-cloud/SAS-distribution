@@ -44,6 +44,7 @@ pipeline {
                    if ("${gitBranch}" == 'master') {
                        echo "****************************************This is master!*********************************"
                        sh "git checkout -b release-${version}"
+                       gitBranch = "release-${version}"
                        commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
                        commitId = commitId.substring(1)
                        tagName = "release-v${version}"
@@ -266,7 +267,7 @@ pipeline {
                     sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
                     sh "git remote -v"
                     sh "git push origin refs/tags/${tagName}:refs/tags/${tagName}"
-                    sh "git push origin refs/heads/release-${version}:refs/heads/release-${version}"
+                    sh "git push origin refs/heads/${gitBranch}:refs/heads/${gitBranch}"
                 }
             }
         }
