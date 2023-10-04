@@ -90,91 +90,91 @@ pipeline {
                }
            }
        }
-       stage('Edit ChangeLog') {
-            steps {
-                script {
+//        stage('Edit ChangeLog') {
+//             steps {
+//                 script {
 
-                    def gitDomain = "${gitUrl}".tokenize('/')[0]
-                    def changelogString = gitChangelog returnType: 'STRING',
-                           from: [type: 'REF', value: "tags/release-v${prev_version}"],
-                            to: [type: 'REF', value: "tags/release-v${version}"],
-                            template:
-"""
-  {{#tags}}
-# {{name}}
- {{#issues}}
+//                     def gitDomain = "${gitUrl}".tokenize('/')[0]
+//                     def changelogString = gitChangelog returnType: 'STRING',
+//                            from: [type: 'REF', value: "tags/release-v${prev_version}"],
+//                             to: [type: 'REF', value: "tags/release-v${version}"],
+//                             template:
+// """
+//   {{#tags}}
+// # {{name}}
+//  {{#issues}}
  
-     {{#ifContainsType commits type='feat'}}
-## Features
+//      {{#ifContainsType commits type='feat'}}
+// ## Features
 
-    {{#commits}}
-      {{#ifCommitType . type='feat'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='feat'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='mod'}}
-## Refactor
+//      {{#ifContainsType commits type='mod'}}
+// ## Refactor
 
-    {{#commits}}
-      {{#ifCommitType . type='mod'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='mod'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='fix'}}
-## Bug Fixes
+//      {{#ifContainsType commits type='fix'}}
+// ## Bug Fixes
 
-    {{#commits}}
-      {{#ifCommitType . type='fix'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='fix'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}*
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}*
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
   
-     {{#ifContainsType commits type='etc'}}
-## OTHERS
+//      {{#ifContainsType commits type='etc'}}
+// ## OTHERS
 
-    {{#commits}}
-      {{#ifCommitType . type='etc'}}
-**{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
+//     {{#commits}}
+//       {{#ifCommitType . type='etc'}}
+// **{{#eachCommitScope .}} {{.}} {{/eachCommitScope}}{{{commitDescription .}}}**  ([{{hash}}](http://${gitDomain}/{{ownerName}}/{{repoName}}/commit/{{hash}})) *{{authorName}} {{commitTime}}*
 
-{{#messageBodyItems}}
-  *{{.}}* 
-{{/messageBodyItems}}
+// {{#messageBodyItems}}
+//   *{{.}}* 
+// {{/messageBodyItems}}
 
-      {{/ifCommitType}}
-    {{/commits}}
-  {{/ifContainsType}} 
- {{/issues}}
-{{/tags}}
-"""
-                    writeFile file: "tmp/CHANGELOG_new", text: changelogString
-                    currentBuild.description = changelogString
-                    sh "mv CHANGELOG.md tmp/tmpfile"
-                    sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
-                    sh "cat tmp/tmpfile >> CHANGELOG.md"
-                    sh "ls -al"
-                }
-            }
-       }
+//       {{/ifCommitType}}
+//     {{/commits}}
+//   {{/ifContainsType}} 
+//  {{/issues}}
+// {{/tags}}
+// """
+//                     writeFile file: "tmp/CHANGELOG_new", text: changelogString
+//                     currentBuild.description = changelogString
+//                     sh "mv CHANGELOG.md tmp/tmpfile"
+//                     sh "cat tmp/CHANGELOG_new > CHANGELOG.md"
+//                     sh "cat tmp/tmpfile >> CHANGELOG.md"
+//                     sh "ls -al"
+//                 }
+//             }
+//        }
 //         stage('Send Email') {
 //             steps {
 //                 emailext (
