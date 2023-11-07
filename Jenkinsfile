@@ -195,11 +195,13 @@ pipeline {
 // Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 // - **Common**
-//     - Decoder에서 메모리 leak 발생 해결
-//     - Decoder에서 쓰이는 channel buffer를 재사용할 수 있도록 변경
-//     - ExternalController SA mode 동작 정상화
-// - **Monitoring**
-//     - ck1-1 팀 log db 저장 및 monitoring 기능 추가
+//     - ScheduleTask bugfix
+//     - OutboundTask - Timeout 30s 제거
+//     - sasctl get worker 시 Gateway 노출
+// - **DBCP**
+//     - Update datasource 기능 추가
+//     - Failover를 위한 secondary db 옵션 지원
+//     - sasctl get datasource - secondaryDB, traceMonitoring 표기
 
 // 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 // super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -242,7 +244,7 @@ pipeline {
 //                         from: "dohyun_kim5@tmax.co.kr"
 //                 )
 //             }
-//         }
+        // }
         stage('Git Push') {
             steps {
                 echo "pushing..."
