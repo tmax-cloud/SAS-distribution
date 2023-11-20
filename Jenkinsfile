@@ -83,7 +83,7 @@ pipeline {
                    docker.withRegistry('', 'dockercred') {
                        dockerImage.push()
                    }
-                   sh "docker push ${dockerRegistry}/super-app-server:${version}"
+                //    sh "docker push ${dockerRegistry}/super-app-server:${version}"
                    sh "docker login hyperregistry.tmaxcloud.org -u admin -p admin"
                    sh "docker tag ${dockerRegistry}/super-app-server:${version} hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
                    sh "docker push hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
