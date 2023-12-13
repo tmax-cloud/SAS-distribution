@@ -184,8 +184,6 @@ pipeline {
 
 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-※ 정식 버전인 super-app-server:0.4.0 은 QA 검증을 마친 후 CK 및 타본부에 배포될 예정입니다.
-
 ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
 
 https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
@@ -194,13 +192,7 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- Library schema 변경
-- ims-312955, 313119, 312293, 314416 해소
-- SAS service 가 존재하지 않는 binary를 application으로 배포 지원 (internal controller 단일 배포)
-- Service Router에서 SMS 서비스로 라우팅 못 해주던 버그 수정
-- 하나의 application에서 여러 controller class 배포 지원
-- sasctl을 통한 DataSource 검색 및 적용시, ID/Name 모두 사용할 수 있도록 편의 기능 추가
-- sasctl을 통한 DataSource 조회 시, create_at 표기방식 변경
+- Application loading 시 ClassGraph 사용 로직 제거로 SAS Memory 사용량 개선
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -239,8 +231,8 @@ hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 Default DNS 192.168.1.150 로 설정
 
 """,
-                        // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
-                        to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
+                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+                        // to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
                         from: "dohyun_kim5@tmax.co.kr"
                 )
             }
