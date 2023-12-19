@@ -173,71 +173,95 @@ pipeline {
                 }
             }
        }
-       stage('Send Email') {
-            steps {
-                emailext (
-                        attachmentsPattern: 'CHANGELOG.md',
-                        subject: "[super-app-server] Release Notes - super-app-server:${version}",
-                        body:
-                                """
- 안녕하세요. ck1-2팀 김도현입니다.
+//        stage('Send Email') {
+//             steps {
+//                 emailext (
+//                         attachmentsPattern: 'CHANGELOG.md',
+//                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
+//                         body:
+//                                 """
+//  안녕하세요. ck1-2팀 김도현입니다.
 
-금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+// 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
-${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
+// ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
 
-https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
+// https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
 
-===
+// ===
 
-Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
+// Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- ControllerService - InvocationHandler에서 db connection 사용 지원
+// - **Common**
+//     - Admin service에서 binary 전송 방식 bytebuffer → FileChannel 로 변경
+//     - sasctl input - ID 를 parameter로 받도록 통합 변경
+// - **Schedule**
+//     - schedule type 삭제 관련 고도화
+// - **Library**
+//     - DB schema 변경
+//     - Worker SAS 재기동 시 재배포 지원
+//     - Library undeploy 기능 지원
+// - **Server Message Service**
+//     - DB schema 변경 및 서비스 비동기화
+//     - sms_broker_message 테이블 생성 (exception message 저장)
+//     - sasctl describe broker 서비스 추가
+// - **Datasource**
+//     - Datasource 서비스 비동기화
+//     - Persistent datasource 사용하는 app에 대해 datasource 설정 시 exception 처리 추가
+// - **Monitoring**
+//     - Trace
+//         - `MONITOR_TRACE` off 시 수집단계에서 중지하여 메모리 최적화
+//         - Monitoring data Jaeger API - grafana 연동 조회 서비스 업데이트
+//     - Metric
+//         - Metric tablespace 생성
+//         - Worker SAS 에서 metric 수집 on/off 적용 (`MONITOR_METRIC`)
+//     - Log
+//         - Series label 테이블 구조 리팩터링 및 적재 조회 서비스 업데이트
 
-자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
-super-object Wiki를 참고해 주시면 감사하겠습니다.
+// 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
+// super-object Wiki를 참고해 주시면 감사하겠습니다.
 
-===
+// ===
 
-※ SuperApp 서비스 예제 프로젝트:
-http://gitlab.ck:10081/superobject/super-app-service-example
-해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
-super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+// ※ SuperApp 서비스 예제 프로젝트:
+// http://gitlab.ck:10081/superobject/super-app-service-example
+// 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+// super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
-구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
-http://gitlab.ck:10081/superobject/super-object/wikis/home
+// 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+// http://gitlab.ck:10081/superobject/super-object/wikis/home
 
-SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+// SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
-감사합니다.
-
-
-- 김도현 드림.
+// 감사합니다.
 
 
-※ SuperApp Server Runtime :
-http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+// - 김도현 드림.
 
-※ SuperApp Server Maven Repository :
-http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-※ SuperApp Server Project :
-http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+// ※ SuperApp Server Runtime :
+// http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
-※ SuperApp Server Container Image :
-hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+// ※ SuperApp Server Maven Repository :
+// http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
-※ gitlab.ck:10081 접속 방법 :
-Default DNS 192.168.1.150 로 설정
+// ※ SuperApp Server Project :
+// http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
 
-""",
-                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
-                        // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
-                        // to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
-                        from: "dohyun_kim5@tmax.co.kr"
-                )
-            }
-        } 
+// ※ SuperApp Server Container Image :
+// hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+
+// ※ gitlab.ck:10081 접속 방법 :
+// Default DNS 192.168.1.150 로 설정
+
+// """,
+//                         to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+//                         // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+//                         // to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
+//                         from: "dohyun_kim5@tmax.co.kr"
+//                 )
+//             }
+//         } 
         stage('Git Push') {
             steps {
                 echo "pushing..."
