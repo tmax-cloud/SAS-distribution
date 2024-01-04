@@ -195,6 +195,7 @@ Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되
 - **Common**
     - FileChannel - RefCntFileManager 추가
     File 을 reference 하는 TaskObject 가 없을 때 file delete
+    - FileChannel - create 실패 시 error response 전송 로직 추가
     - DirectBuffer 사용
     PooledByteBufAllocator.DEFAULT.buffer() → directBuffer 로 치환
     - EventManager 무한 루프 bugfix
@@ -204,6 +205,11 @@ Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되
     - sasctl create binaryGroup 으로 binary group 생성 후 upload 가능
 - **Application**
     - Application_instance 테이블 추가
+- **Monitoring**
+    - ims 314577 (로그 outdto 출력 형식 버그 수정)
+    - ims 315790 (로그 적재 테이블 오타 버그 수정)
+    - ims 315834 (Metric NPE 에러 수정)
+    - ims 312955 (worker 2개 메트릭 수집 오류) 해소
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
