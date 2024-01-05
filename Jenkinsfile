@@ -6,7 +6,8 @@ pipeline {
         gitCred = "Rbxxb7pBtyw6D_KqbNWa"
         gitBranch = "${params.gitBranch}"
         version = "${params.version}"
-        prev_version = "${params.prev_version}"
+        // prev_version = "${params.prev_version}"
+        prev_version = "default"
         dockerRegistry = "192.168.9.12:5000"
         publishUrl = "http://192.168.9.12:8081/repository/maven-releases"
         repoUser = "root"
@@ -193,23 +194,9 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - **Common**
-    - FileChannel - RefCntFileManager 추가
-    File 을 reference 하는 TaskObject 가 없을 때 file delete
-    - FileChannel - create 실패 시 error response 전송 로직 추가
-    - DirectBuffer 사용
-    PooledByteBufAllocator.DEFAULT.buffer() → directBuffer 로 치환
-    - EventManager 무한 루프 bugfix
-    TaskObjectExecutorChooserFactory used queue에 add 로직 추가
-- **Binary**
-    - BinaryGroup 추가
-    - sasctl create binaryGroup 으로 binary group 생성 후 upload 가능
-- **Application**
-    - Application_instance 테이블 추가
-- **Monitoring**
-    - ims 314577 (로그 outdto 출력 형식 버그 수정)
-    - ims 315790 (로그 적재 테이블 오타 버그 수정)
-    - ims 315834 (Metric NPE 에러 수정)
-    - ims 312955 (worker 2개 메트릭 수집 오류) 해소
+    - BinaryGroup get 서비스 고도화
+    (-- recursive option 추가)
+    - sasctl describe binaryGroup 명령어 추가
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -248,7 +235,7 @@ hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 Default DNS 192.168.1.150 로 설정
 
 """,
-                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr; ck_rnd3_2@tmax.co.kr",
                         // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
                         // to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
                         from: "dohyun_kim5@tmax.co.kr"
