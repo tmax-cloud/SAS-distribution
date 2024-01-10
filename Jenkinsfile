@@ -181,7 +181,9 @@ pipeline {
                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
                         body:
                                 """
- 안녕하세요. ck1-2팀 김도현입니다.
+ 안녕하세요. ck1-2팀 최성훈입니다.
+
+배포 메일이 잘못 작성되어 정정 메일 전달드립니다.
 
 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
@@ -193,10 +195,8 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - BinaryGroup get 서비스 고도화
-    (-- recursive option 추가)
-    - sasctl describe binaryGroup 명령어 추가
+- **SMS**
+    - SMS 서비스 사용 시 DTO Casting 오류 수정
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
