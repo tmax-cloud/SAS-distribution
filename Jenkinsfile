@@ -194,45 +194,15 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - **Common**
-    - Admin 서비스 MSA 구조 변경 - 비동기화 
-    (admin 서비스 요청을 ResponseHandler 에서 즉각 유효성 검증 및 response return)
-    - 전체 서비스 패키지 구조 변경 (admin - resource - handler - service)
-    - Admin 서비스 Constant 화
-    - 전체 ResourceID 발급 체계 변경
-    - Application loading 시 성능 개선 및 ClassLoading 로직 리팩터링
-    (FileChannel 및 DirectBuffer 사용으로 heap memory 사용량 감소)
-    - EventManager 동작 오류 수정
-- **Service Router**
-    - Service Router의 routing map 갱신 로직 개선
-    - Port_mapping 테이블 추가
-    - SASWorker - SAG Channel lost 시 재연결 시도
-- **Binary**
-    - Binary Group 추가
-- **Application**
-    - Multi-Binary 앱배포 지원
-    - Application, Library load 과정 리팩터링
-- **Sasctl**
-    - Subcommand 및 parameter, option 변경
-        - create, describe 명령어 추가
-        - 리소스 별 id 를 parameter 로 받도록 사용성 변경
-        - apply / delete command 로 routing rule 설정
-- **Controller**
-    - Application과 Controller 배포 방식 통합
-    - Controller Service 리소스 삭제
-    - External Controller 배포시 appName parameter 추가
-- **Schedule**
-    - Get, Describe, Run, RunAll, Cancel, Delete 서비스 개선
-    - RunSchedule 시 node-id를 특정하여 schedule 하도록 변경
-    - Application 의 replicas 에 모두 schedule 하기 위해 RunAll 서비스 추가
+    - Application Deploy bugfix
+    InvocationHandler - afterDeployment 에서 timeout 발생 시 exception 저장 오류 수정
+    - Timeout bugfix
+    Application Service - service timeout 미지정 시 Default_timeout (30s) 로 설정
+    - OutboundTask 에 대한 completionListener 동작 수정
+    - Controller 배포 후 library 배포 시 동작 오류 수정
 - **Monitoring**
-    - Trace
-        - `MONITOR_TRACE` off 시 수집단계에서 중지하여 메모리 최적화
-        - Monitoring data Jaeger API - grafana 연동 조회 서비스 업데이트
-    - Metric
-        - Metric tablespace 생성
-        - Worker SAS 에서 metric 수집 on/off 적용 (`MONITOR_METRIC`)
-    - Log
-        - Series label 테이블 구조 리팩터링 및 적재 조회 서비스 업데이트
+    - IMS 316846 해소 
+    (StackMonitoringData 서비스 동작 시 간헐적으로 NOT NULL constraint violation 에러 발생)
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -271,8 +241,9 @@ hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 Default DNS 192.168.1.150 로 설정
 
 """,
-                        // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr; ck_rnd3_2@tmax.co.kr",
-                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+                        to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+                        // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr; ck_rnd3_2@tmax.co.kr;",
+                        // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
                         // to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
                         from: "dohyun_kim5@tmax.co.kr"
                 )
