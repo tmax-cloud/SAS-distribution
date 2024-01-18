@@ -181,7 +181,7 @@ pipeline {
                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
                         body:
                                 """
- 안녕하세요. ck1-2팀 김도현입니다.
+ 안녕하세요. ck1-2팀 이재훈입니다.
 
 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
@@ -193,16 +193,8 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - Application Deploy bugfix
-    InvocationHandler - afterDeployment 에서 timeout 발생 시 exception 저장 오류 수정
-    - Timeout bugfix
-    Application Service - service timeout 미지정 시 Default_timeout (30s) 로 설정
-    - OutboundTask 에 대한 completionListener 동작 수정
-    - Controller 배포 후 library 배포 시 동작 오류 수정
-- **Monitoring**
-    - IMS 316846 해소 
-    (StackMonitoringData 서비스 동작 시 간헐적으로 NOT NULL constraint violation 에러 발생)
+- **Decoder**
+    - 특정 상황에서의 SAP binary 영역 처리 실패 오류 수정
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -222,7 +214,7 @@ SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를
 감사합니다.
 
 
-- 김도현 드림.
+- 이재훈훈 드림.
 
 
 ※ SuperApp Server Runtime :
@@ -245,7 +237,7 @@ Default DNS 192.168.1.150 로 설정
                         // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr; ck_rnd3_2@tmax.co.kr;",
                         // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck3_lab@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
                         // to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
-                        from: "dohyun_kim5@tmax.co.kr"
+                        from: "jaehun_lee@tmax.co.kr"
                 )
             }
         } 
