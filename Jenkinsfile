@@ -214,7 +214,7 @@ SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를
 감사합니다.
 
 
-- 이재훈훈 드림.
+- 이재훈 드림.
 
 
 ※ SuperApp Server Runtime :
