@@ -181,7 +181,7 @@ pipeline {
                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
                         body:
                                 """
- 안녕하세요. ck1-2팀 김도현입니다.
+ 안녕하세요. ck1-2팀 최성훈입니다.
 
 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
@@ -193,17 +193,8 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- Invocation bugfix
-    - Undeploy app / cont / contsvc 동작에서 invcation beforeTermination fail 시 
-    `force` option 추가
-    (sasctl undeploy app testapp -f)
-    - InvocationHandler에서 callSyncInternal 사용 오류 수정
-- EventManager bugfix
-    - Outbound 서비스 호출 시
-    TaskObjectExecutorChooserFactory.useThread() 호출 누락으로
-    thread queue 꽉 차서 무한루프 빠지는 오류 수정
-- ExternalController 보완
-    - replicas 표시 추가
+- SMS Broker bugfix
+    - 여러 유저에 SMS DB 테이블 정보가 있을 때 정상적으로 Broker 배포가 안되는 현상
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -223,7 +214,7 @@ SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를
 감사합니다.
 
 
-- 김도현 드림.
+- 최성훈 드림.
 
 
 ※ SuperApp Server Runtime :
