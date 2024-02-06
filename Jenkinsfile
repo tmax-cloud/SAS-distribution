@@ -197,6 +197,8 @@ pipeline {
     - SAS - StandAlone mode 에서 schedule bugfix
     - WorkerSAS 삭제 시 SAG 로 cbr update info 전송 로직 추가
     - DeleteCbrInfo bugfix - strategy, jsonpath 추가
+- **Encoder, Decoder**
+    - UserId와 PersonaId를 Big Endian으로 처리하도록 변경
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
