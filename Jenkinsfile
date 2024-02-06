@@ -181,7 +181,7 @@ pipeline {
                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
                         body:
                                 """
- 안녕하세요. ck1-2팀 김도현입니다.
+ 안녕하세요. ck1-2팀 최성훈입니다.
 
 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
@@ -193,33 +193,8 @@ https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059
 
 Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - MWM - SAG config, ssl 전송 로직 추가
-    - InvocationHandlerService에서 CallSyncInternal을 사용할 수 있도록 변경
-    ([Enable CallSyncInternal Method in InvocationHandlerService (#343) · Issues · SuperObject / super-object · GitLab](http://192.168.1.150:10081/superobject/super-object/issues/343))
-    - 응답을 기다리고 있는 OutBoundTask의 Request Message의 Body 제거 
-    ([Remove OutBoundTask's Request Message after Sending it To Other SAS (#345) · Issues · SuperObject / super-object · GitLab](http://192.168.1.150:10081/superobject/super-object/issues/345))
-    - MessageObject에 encode(), decode() 메소드 추가
-    ([Add Encoding Decoding Method in MessageObject (#346) · Issues · SuperObject / super-object · GitLab](http://192.168.1.150:10081/superobject/super-object/issues/346))
-- **Router**
-    - SAG 로 ContentsBasedRouting, Priority rule 전송 로직 추가
-- **Application, Binary**
-    - Worker에서 binary jar 저장 시 file hash 포함한 경로로 저장하도록 변경
-    - DeleteBinary 서비스 re-activate
-- **Timeout**
-    - Timetout 지정 서비스 추가 
-    (com.tmax.superobject.admin.common.SetDefaultTimeout)
-    (key - `defaultTimeout`, `timeUnit`)
-    - MWM env 로 `DEFAULT_TIMEOUT` 설정 추가
-    - Timeout 값을 mwm db에서 관리하도록 변경
-    - TaskObject.routeService() 에서 일괄적으로 timeout 설정
-- **Monitoring**
-    - plas 콜 트레이스 대시보드 구성을 위한 서비스 추가
-    - 모니터링 데이터 삭제서비스 추가
-    - 로그 조회 시 유효성 검사 추가
-    - 로그 조회를 앱 및 서비스 명으로도 가능하도록 조회 옵션 추가
-- **Encoder**
-    - 메세지를 작은 청크 단위로 송신하도록 변경
+- **Controller**
+    - 유효하지 않은 controller service로 요청을 전송했을 때 thread blocking 되는 이슈 해결
 
 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
 super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -239,7 +214,7 @@ SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를
 감사합니다.
 
 
-- 김도현 드림.
+- 최성훈 드림.
 
 ※ SuperApp Server Runtime :
 http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
