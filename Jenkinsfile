@@ -194,11 +194,7 @@ pipeline {
  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - **Common**
-    - SAS - StandAlone mode 에서 schedule bugfix
-    - WorkerSAS 삭제 시 SAG 로 cbr update info 전송 로직 추가
-    - DeleteCbrInfo bugfix - strategy, jsonpath 추가
-- **Encoder, Decoder**
-    - UserId와 PersonaId를 Big Endian으로 처리하도록 변경
+    - 이전 버전의 이름으로 서비스 호출 시 dto casting error 해결
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
