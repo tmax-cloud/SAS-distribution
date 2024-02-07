@@ -195,8 +195,7 @@ pipeline {
 
 - **Controller**
     - External controller에서 replica 정보 표시 추가
-- **SMS**
-    - Worker pool이 완전히 내려갔다가 다시 기동 될 때도 broker 재배포 가능하도록 개선
+    - UpdateController 과정에서 에러 발생하는 부분 수정
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
