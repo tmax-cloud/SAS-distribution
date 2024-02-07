@@ -183,6 +183,8 @@ pipeline {
                                  """
   안녕하세요. ck1-2팀 최성훈입니다.
 
+ 기존 배포 메일 버전 표기에 문제가 있어 정정 메일 다시 전달드립니다.
+ 
  금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
  ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
