@@ -181,7 +181,7 @@ pipeline {
                          subject: "[super-app-server] Release Notes - super-app-server:${version}",
                          body:
                                  """
-  안녕하세요. ck1-2팀 김도현입니다.
+  안녕하세요. ck1-2팀 최성훈입니다.
 
  금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
@@ -193,8 +193,10 @@ pipeline {
 
  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - 이전 버전의 이름으로 서비스 호출 시 dto casting error 해결
+- **Controller**
+    - External controller에서 replica 정보 표시 추가
+- **SMS**
+    - Worker pool이 완전히 내려갔다가 다시 기동 될 때도 broker 재배포 가능하도록 개선
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -213,7 +215,7 @@ pipeline {
 
  감사합니다.
 
- - 김도현 드림.
+ - 최성훈 드림.
 
  ※ SuperApp Server Runtime :
  http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
@@ -235,7 +237,7 @@ pipeline {
                          // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr; ck_rnd3_2@tmax.co.kr;",
                          to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
                          // to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr;",
-                         from: "dohyun_kim5@tmax.co.kr"
+                         from: "sunghoon_choi@tmax.co.kr"
                  )
              }
          } 
