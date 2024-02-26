@@ -188,13 +188,21 @@ pipeline {
 
  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - MWM - SAG config, ssl 전송 로직 버그 수정
-    - gradle - assertj, javax.persistence dependency 제거
-    - SAS - StandAlone 모드에서 register controller 버그 수정
-    (ServiceRouter routingmap put logic 제거)
-- **Controller**
-    - External Controller 로부터 Error response 처리 로직 추가
+ - **Common**
+    - SAS Resource 변경
+    binary_name → binary_group_name 으로 변경
+    - ServiceGroup 기능 추가 (annotation 으로 ServiceGroup 지정 가능)
+    - ServiceGroup 별 threadPool 분리
+    - WorkerPool 삭제 기능 추가
+    - Custom Routing Rule 중 CBR의 Mapping Strategy에서 TargetNode를 변경하여 재지정했을 때, RoutingMap에 반영되지 않는 버그 수정
+- **Proxy**
+    - super-app-proxy 관련 Admin Service 추가
+    - Proxy 호출 메소드 추가
+    - Proxy 요청을 위한 Dto 추가
+    - [Home · Wiki · superobject / super-app-proxy · GitLab](http://172.21.3.8:10081/superobject/super-app-proxy/-/wikis/home)
+- **Monitoring**
+    - 트레이스/토폴로지 시각화용 서비스 추가 및 로직수정
+    - 로그 조회 쿼리 로직수정 및 이슈 해결
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
