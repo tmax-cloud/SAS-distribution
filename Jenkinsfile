@@ -41,22 +41,17 @@ pipeline {
                         prev_version = sh(script:"sudo git describe --tags --abbrev=0", returnStdout: true).tokenize('-')[1].replace("v","")
                         echo "${prev_version}"
                    }
-
                    if ("${gitBranch}" == 'master') {
                        echo "****************************************This is master!*********************************"
                        sh "git checkout -b release-${version}"
                        gitBranch = "release-${version}"
-                       commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
-                       commitId = commitId.substring(1)
-                       tagName = "release-v${version}"
-                       sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    } else {
                        echo "****************************************${gitBranch}!***********************************"
-                       commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
-                       commitId = commitId.substring(1)
-                       tagName = "release-v${version}"
-                       sh "git tag -a ${tagName} -m 'Version ${version} update'"
                    }
+                   commitId = sh(returnStdout: true, script: "git log | head -1 | cut -b 7-15")
+                   commitId = commitId.substring(1)
+                   tagName = "release-v${version}"
+                   sh "git tag -a ${tagName} -m 'Version ${version} update'"
                }
             }
         }
@@ -251,6 +246,10 @@ pipeline {
                     commitMsg = "Release commit - version ${version}"
                     sh "git add -A"
                     sh "git commit -m \"${commitMsg}\" || true"
+                    // re-tag to apply Release-note
+                    tagName = "release-v${version}"
+                    sh "git tag -d ${tagName}"
+                    sh "git tag -a ${tagName} -m 'Version ${version} update'"
                     sh "git remote rm origin"
                     sh "git remote add origin http://dohyun_kim5:ehgus0303!@${gitUrl}"
                     sh "git remote -v"
