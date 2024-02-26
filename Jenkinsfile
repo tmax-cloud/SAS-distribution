@@ -202,12 +202,12 @@ pipeline {
  ===
 
  ※ SuperApp 서비스 예제 프로젝트:
- http://gitlab.ck:10081/superobject/super-app-service-example
+ http://172.21.3.8:10081/superobject/super-app-service-example
  해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
  super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
  구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
- http://gitlab.ck:10081/superobject/super-object/wikis/home
+ http://172.21.3.8:10081/superobject/super-object/wikis/home
 
  SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
@@ -222,13 +222,10 @@ pipeline {
  http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
  ※ SuperApp Server Project :
- http://gitlab.ck:10081/superobject/super-object/tree/release-${version}
+ http://172.21.3.8:10081/superobject/super-object/tree/release-${version}
 
  ※ SuperApp Server Container Image :
  hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
-
- ※ gitlab.ck:10081 접속 방법 :
- Default DNS 192.168.1.150 로 설정
 
  """,
                          // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
