@@ -2,7 +2,7 @@ pipeline {
     agent any 
     environment {
       // gitlab
-        gitUrl = "192.168.1.150:10081/superobject/super-object.git"
+        gitUrl = "172.21.3.8:10081/superobject/super-object.git"
         gitCred = "Rbxxb7pBtyw6D_KqbNWa"
         gitBranch = "${params.gitBranch}"
         version = "${params.version}"
