@@ -189,7 +189,7 @@ pipeline {
  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - **Common**
-    - 일정 주기로 library blob 파일이 DB에서 삭제되는 버그 수정
+    - TaskObject terminate state NPE 발생 시 무한루프 버그 수정
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -226,8 +226,8 @@ pipeline {
  Default DNS 192.168.1.150 로 설정
 
  """,
-                         // to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
-                         to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+                         to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+                        //  to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
                         //  to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr; hyeonsoo_yoo@tmax.co.kr;",
                          from: "dohyun_kim5@tmax.co.kr"
                  )
