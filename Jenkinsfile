@@ -189,7 +189,7 @@ pipeline {
  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
 - **Common**
-    - 요청한 Application이 배포되어있지 않은 경우 App Not Found Exception을 응답 메세지를 받을 때 던지도록 수정
+    - CallAsync나 CallSync로 보낸 요청의 Application이 배포되어있지 않은 경우 App Not Found Exception을 응답 메세지를 받을 때 던지도록 수정
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
