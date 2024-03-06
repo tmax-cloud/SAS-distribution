@@ -188,6 +188,8 @@ pipeline {
 
  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
+ - **Common**
+    - Library 배포 시 기존 app 의 dynamic datasource 유실되는 버그 수정
 - **Controller**
     - Pending 상태인 app(cont)를 undeploy 했을 때 controller_internal DB에서 삭제되지 않는 현상
     - Master가 재기동되어 worker에 app(cont)를 다시 배포하는 경우, internal controller의 instance가 여러개 생성되는 현상 수정
