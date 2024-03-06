@@ -176,7 +176,7 @@ pipeline {
                          subject: "[super-app-server] Release Notes - super-app-server:${version}",
                          body:
                                  """
-  안녕하세요. ck1-2팀 이재훈입니다.
+  안녕하세요. ck1-2팀 김도현입니다.
  
  금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
@@ -188,8 +188,9 @@ pipeline {
 
  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
-- **Common**
-    - CallAsync나 CallSync로 보낸 요청의 Application이 배포되어있지 않은 경우 App Not Found Exception을 응답 메세지를 받을 때 던지도록 수정
+- **Controller**
+    - Pending 상태인 app(cont)를 undeploy 했을 때 controller_internal DB에서 삭제되지 않는 현상
+    - Master가 재기동되어 worker에 app(cont)를 다시 배포하는 경우, internal controller의 instance가 여러개 생성되는 현상 수정
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
@@ -208,7 +209,7 @@ pipeline {
 
  감사합니다.
 
- - 이재훈 드림.
+ - 김도현 드림.
 
  ※ SuperApp Server Runtime :
  http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
