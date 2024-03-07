@@ -191,7 +191,6 @@ pipeline {
  - **Common**
     - StandAlone 모드에서 application not found exception handling 추가
     - ims-319832 (appName key contains 로 비교) 해소
-    - lib업데이트 이후 loadApp시에 dbcp충돌 현상 해결
 
  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
  super-object Wiki를 참고해 주시면 감사하겠습니다.
