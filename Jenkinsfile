@@ -169,71 +169,72 @@ pipeline {
                 }
             }
        }
-        stage('Send Email') {
-             steps {
-                 emailext (
-                         attachmentsPattern: 'CHANGELOG.md',
-                         subject: "[super-app-server] Release Notes - super-app-server:${version}",
-                         body:
-                                 """
-  안녕하세요. ck1-2팀 김도현입니다.
+//         stage('Send Email') {
+//              steps {
+//                  emailext (
+//                          attachmentsPattern: 'CHANGELOG.md',
+//                          subject: "[super-app-server] Release Notes - super-app-server:${version}",
+//                          body:
+//                                  """
+//   안녕하세요. ck1-2팀 김도현입니다.
  
- 금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
+//  금주 배포된 super-app-server:${version} release 버전에 대한 안내 및 가이드 메일 드립니다.
 
- ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
+//  ${version}의 개선 및 추가된 사항은 아래 Super-App-Server Release Note 링크를 참고 부탁드립니다.
 
- https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
+//  https://flying-balmoral-4aa.notion.site/Super-App-Server-Release-Note-9cb55fc059ef4559988dda2c069e1054
 
- ===
+//  ===
 
- Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
+//  Super-App-Server-${version} 버전에서는 다음과 같은 기능이 추가되었습니다.
 
- - **Common**
-    - StandAlone 모드에서 application not found exception handling 추가
-    - ims-319832 (appName key contains 로 비교) 해소
+//  - **Common**
+//     - StandAlone 모드에서 application not found exception handling 추가
+//     - ims-319832 (appName key contains 로 비교) 해소
+//     - lib업데이트 이후 loadApp시에 dbcp충돌 현상 해결
 
- 자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
- super-object Wiki를 참고해 주시면 감사하겠습니다.
+//  자세한 예시 코드 및 가이드를 Wiki에 업로드 할 예정이오니
+//  super-object Wiki를 참고해 주시면 감사하겠습니다.
 
- ===
+//  ===
 
- ※ SuperApp 서비스 예제 프로젝트:
- http://192.168.1.150:10081/superobject/super-app-service-example
- 해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
- super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
+//  ※ SuperApp 서비스 예제 프로젝트:
+//  http://192.168.1.150:10081/superobject/super-app-service-example
+//  해당 프로젝트를 참조하여 AbstractServiceObject 를 상속받아 슈퍼앱 서비스를 구현하고,
+//  super-app-runtime.jar 런타임을 실행시키면 테스트가 가능합니다.
 
- 구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
- http://192.168.1.150:10081/superobject/super-object/wikis/home
+//  구체적인 설치 및 서비스 개발, 그리고 테스트 가이드에 대한 내용은 해당 WIKI 가이드 참고 부탁드립니다.
+//  http://192.168.1.150:10081/superobject/super-object/wikis/home
 
- SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
+//  SuperApp Server 관련된 문의사항 있으실 경우 메일 혹은 WAPL TF를 통해 문의해주시면 바로 대응하도록 하겠습니다.
 
- 감사합니다.
+//  감사합니다.
 
- - 김도현 드림.
+//  - 김도현 드림.
 
- ※ SuperApp Server Runtime :
- http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
+//  ※ SuperApp Server Runtime :
+//  http://192.168.9.12/binary/super-app-runtime/super-app-runtime-${version}
 
- ※ SuperApp Server Maven Repository :
- http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
+//  ※ SuperApp Server Maven Repository :
+//  http://192.168.9.12:8081/#browse/browse:maven-releases:com%2Ftmax%2Fsuper-app-server%2F0.0.5%2Fsuper-app-server-${version}.jar
 
- ※ SuperApp Server Project :
- http://192.168.1.150:10081/superobject/super-object/tree/release-${version}
+//  ※ SuperApp Server Project :
+//  http://192.168.1.150:10081/superobject/super-object/tree/release-${version}
 
- ※ SuperApp Server Container Image :
- hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
+//  ※ SuperApp Server Container Image :
+//  hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 
-  ※ gitlab.ck:10081 접속 방법 :
- Default DNS 192.168.1.150 로 설정
+//   ※ gitlab.ck:10081 접속 방법 :
+//  Default DNS 192.168.1.150 로 설정
 
- """,
-                         to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
-                        //  to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
-                        //  to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr; hyeonsoo_yoo@tmax.co.kr;",
-                         from: "jaehun_lee@tmax.co.kr"
-                 )
-             }
-         } 
+//  """,
+//                          to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+//                         //  to: "dohyun_kim5@tmax.co.kr; ck_rnd1_unit@tmax.co.kr; ck_rnd2_unit@tmax.co.kr; ck_rnd3_unit@tmax.co.kr; ck_qa_unit@tmax.co.kr;",
+//                         //  to: "dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr; hyeonsoo_yoo@tmax.co.kr;",
+//                          from: "jaehun_lee@tmax.co.kr"
+//                  )
+//              }
+//          } 
         stage('Git Push') {
             steps {
                 echo "pushing..."
