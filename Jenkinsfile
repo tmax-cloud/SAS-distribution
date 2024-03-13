@@ -4,12 +4,12 @@ pipeline {
       // gitlab
         gitUrl = "192.168.1.150:10081/superobject/super-object.git"
         gitCred = "Rbxxb7pBtyw6D_KqbNWa"
-        gitBranch = params['GitBranch']
-        version = params['Version']
-        releaseOption = params['Release Option']
-        versionFeature = params['Version Feature']
-        publisher = params['Publisher']
-        sendTo = params['Send To']
+        gitBranch = "${params.GitBranch}"
+        version = "${params.Version}"
+        releaseOption = "${params.ReleaseOption}"
+        versionFeature = "${params.VersionFeature}"
+        publisher = "${params.Publisher}"
+        sendTo = "${params.SendTo"}
         prev_version = "default"
         dockerRegistry = "192.168.9.12:5000"
         publishUrl = "http://192.168.9.12:8081/repository/maven-releases"
