@@ -75,18 +75,18 @@ pipeline {
                 sh "sudo sh ./scripts/packaging.sh"
             }
         }
-    //     stage ('Build and Upload Docker Image') {
-    //         steps {
-    //             script {
-    //                 def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
-    //                 // sh "docker push ${dockerRegistry}/super-app-server:${version}"
-    //                 sh "docker login hyperregistry.tmaxcloud.org -u admin -p admin"
-    //                 sh "docker tag ${dockerRegistry}/super-app-server:${version} hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
-    //                 sh "docker push hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
-    //                 sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
-    //            }
-    //        }
-    //    }
+        stage ('Build and Upload Docker Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
+                    // sh "docker push ${dockerRegistry}/super-app-server:${version}"
+                    sh "docker login hyperregistry.tmaxcloud.org -u admin -p admin"
+                    sh "docker tag ${dockerRegistry}/super-app-server:${version} hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
+                    sh "docker push hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
+                    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
+               }
+           }
+       }
        stage('Edit ChangeLog') {
             steps {
                 script {
@@ -247,8 +247,8 @@ ${versionFeature}
  Default DNS 192.168.1.150 로 설정
 
  """,
-                            // to: toEmail,
-                            to: "dohyun_kim5@tmax.co.kr",
+                            to: toEmail,
+                            // to: "dohyun_kim5@tmax.co.kr",
                             from: fromEmail
                         )
                     } else if (releaseOption == 'Fix to Full release') {
@@ -301,8 +301,8 @@ ${versionFeature}
  Default DNS 192.168.1.150 로 설정
 
  """,
-                            // to: toEmail,
-                            to: "dohyun_kim5@tmax.co.kr",
+                            to: toEmail,
+                            // to: "dohyun_kim5@tmax.co.kr",
                             from: fromEmail
                         )
                     }
