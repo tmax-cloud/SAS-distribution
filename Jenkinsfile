@@ -9,7 +9,7 @@ pipeline {
         releaseOption = "${params.ReleaseOption}"
         versionFeature = "${params.VersionFeature}"
         publisher = "${params.Publisher}"
-        sendTo = "${params.SendTo"}
+        sendTo = "${params.SendTo}"
         prev_version = "default"
         dockerRegistry = "192.168.9.12:5000"
         publishUrl = "http://192.168.9.12:8081/repository/maven-releases"
