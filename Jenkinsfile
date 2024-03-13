@@ -75,18 +75,18 @@ pipeline {
                 sh "sudo sh ./scripts/packaging.sh"
             }
         }
-        stage ('Build and Upload Docker Image') {
-            steps {
-                script {
-                    def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
-                    // sh "docker push ${dockerRegistry}/super-app-server:${version}"
-                    sh "docker login hyperregistry.tmaxcloud.org -u admin -p admin"
-                    sh "docker tag ${dockerRegistry}/super-app-server:${version} hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
-                    sh "docker push hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
-                    sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
-               }
-           }
-       }
+    //     stage ('Build and Upload Docker Image') {
+    //         steps {
+    //             script {
+    //                 def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
+    //                 // sh "docker push ${dockerRegistry}/super-app-server:${version}"
+    //                 sh "docker login hyperregistry.tmaxcloud.org -u admin -p admin"
+    //                 sh "docker tag ${dockerRegistry}/super-app-server:${version} hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
+    //                 sh "docker push hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
+    //                 sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
+    //            }
+    //        }
+    //    }
        stage('Edit ChangeLog') {
             steps {
                 script {
@@ -191,7 +191,7 @@ pipeline {
                         'CK1-2, QA': 'dohyun_kim5@tmax.co.kr; ck_qa_unit@tmax.co.kr; soohwan_kim@tmax.co.kr; minjae_song@tmax.co.kr; jeongwan_rho@tmax.co.kr; seongmin_lee2@tmax.co.kr; sunghoon_choi@tmax.co.kr; jaehun_lee@tmax.co.kr; hyeonsoo_yoo@tmax.co.kr;'
                     ]
                     def fromEmail = publisherEmails[publisher]
-                    def toEmail = sendToEmails[snedTo]
+                    def toEmail = sendToEmails[sendTo]
                     if (releaseOption == 'Normal release') {
                         emailext (
                             attachmentsPattern: 'CHANGELOG.md',
