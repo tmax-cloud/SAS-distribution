@@ -247,7 +247,8 @@ ${versionFeature}
  Default DNS 192.168.1.150 로 설정
 
  """,
-                            to: toEmail,
+                            // to: toEmail,
+                            to: "dohyun_kim5@tmax.co.kr",
                             from: fromEmail
                         )
                     } else if (releaseOption == 'Fix to Full release') {
@@ -300,7 +301,8 @@ ${versionFeature}
  Default DNS 192.168.1.150 로 설정
 
  """,
-                            to: toEmail,
+                            // to: toEmail,
+                            to: "dohyun_kim5@tmax.co.kr",
                             from: fromEmail
                         )
                     }
