@@ -72,7 +72,12 @@ pipeline {
         }
         stage('Build Package & Upload to ftp server') {
             steps {
-                sh "sudo sh ./scripts/packaging.sh"
+                script {
+                    sh "sudo sh ./scripts/packaging.sh"
+                    if (releaseOption == 'Full release' || releaseOption == 'Fix to Full release') {
+                        sh "sudo sh ./scripts/uploading.sh"
+                    }
+                }
             }
         }
         stage ('Build and Upload Docker Image') {
@@ -90,7 +95,6 @@ pipeline {
        stage('Edit ChangeLog') {
             steps {
                 script {
-
                     def gitDomain = "${gitUrl}".tokenize('/')[0]
                     def changelogString = gitChangelog returnType: 'STRING',
                            from: [type: 'REF', value: "tags/release-v${prev_version}"],
@@ -192,7 +196,7 @@ pipeline {
                     ]
                     def fromEmail = publisherEmails[publisher]
                     def toEmail = sendToEmails[sendTo]
-                    if (releaseOption == 'Normal release') {
+                    if (releaseOption == 'Full release' || releaseOption == 'Fix to Full release') {
                         emailext (
                             attachmentsPattern: 'CHANGELOG.md',
                             subject: "[super-app-server] Release Notes - super-app-server:${version}",
