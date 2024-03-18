@@ -196,7 +196,7 @@ pipeline {
                     ]
                     def fromEmail = publisherEmails[publisher]
                     def toEmail = sendToEmails[sendTo]
-                    if (releaseOption == 'Full release' || releaseOption == 'Fix to Full release') {
+                    if (releaseOption == 'Full release' || releaseOption == 'Fix release') {
                         emailext (
                             attachmentsPattern: 'CHANGELOG.md',
                             subject: "[super-app-server] Release Notes - super-app-server:${version}",
