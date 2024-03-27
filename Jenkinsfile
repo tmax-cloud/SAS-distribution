@@ -245,6 +245,9 @@ ${versionFeature}
  ※ SuperApp Server Project :
  http://192.168.1.150:10081/superobject/super-object/tree/release-${version}
 
+ ※ OSS Super App Server :
+ http://192.168.1.150:10081/superobject/super-object/-/wikis/OSS-SAS
+
  ※ SuperApp Server Container Image :
  hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
 
@@ -298,6 +301,9 @@ ${versionFeature}
 
  ※ SuperApp Server Project :
  http://192.168.1.150:10081/superobject/super-object/tree/release-${version}
+
+ ※ OSS Super App Server :
+ http://192.168.1.150:10081/superobject/super-object/-/wikis/OSS-SAS
 
  ※ SuperApp Server Container Image :
  hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}
