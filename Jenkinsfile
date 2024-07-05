@@ -65,11 +65,11 @@ pipeline {
                 sh "./gradlew clean build jenkins -PbuildVersion=${version} -PcommitId=${commitId}"
             }
         }
-        // stage('Upload Jar') {
-        //     steps {
-        //         sh "./gradlew publish -PbuildVersion=${version} -PpublishUrl=${publishUrl} -PrepoUser=${repoUser} -PrepoPassword=${repoPassword}"
-        //     }
-        // }
+        stage('Upload Jar') {
+            steps {
+                sh "./gradlew publish -PbuildVersion=${version} -PpublishUrl=${publishUrl} -PrepoUser=${repoUser} -PrepoPassword=${repoPassword}"
+            }
+        }
         stage('Build Package & Upload to ftp server') {
             steps {
                 script {
