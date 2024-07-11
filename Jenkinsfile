@@ -88,12 +88,12 @@ pipeline {
                     sh "docker login hyperregistry.tmaxcloud.org -u admin -p admin"
                     sh "docker tag ${dockerRegistry}/super-app-server:${version} hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
                     sh "docker push hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
-                    if (releaseOption == 'Full release' || releaseOption == 'Fix release') {
-                        sh "docker tag ${dockerRegistry}/super-app-server:${version} public.ecr.aws/l0p3k1b5/sas-worker:${version}"
-                        sh "docker tag ${dockerRegistry}/super-app-server:${version} public.ecr.aws/l0p3k1b5/sas-worker"
-                        sh "docker push public.ecr.aws/l0p3k1b5/sas-worker:${version}"
-                        sh "docker push public.ecr.aws/l0p3k1b5/sas-worker"
-                    }
+                    // if (releaseOption == 'Full release' || releaseOption == 'Fix release') {
+                    //     sh "docker tag ${dockerRegistry}/super-app-server:${version} public.ecr.aws/l0p3k1b5/sas-worker:${version}"
+                    //     sh "docker tag ${dockerRegistry}/super-app-server:${version} public.ecr.aws/l0p3k1b5/sas-worker"
+                    //     sh "docker push public.ecr.aws/l0p3k1b5/sas-worker:${version}"
+                    //     sh "docker push public.ecr.aws/l0p3k1b5/sas-worker"
+                    // }
                     sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
                }
            }
