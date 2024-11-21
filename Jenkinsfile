@@ -18,13 +18,26 @@ pipeline {
     }
 
     stages {
+        // stage('Git Clone') {
+        //     steps {
+        //         sh "sudo chown -R jenkins ."
+        //         sh 'ls -al'
+        //         sh 'rm -rf *'
+        //         sh 'rm -rf .g*'
+        //         sh 'git init'
+        //         script {
+        //             echo "${env.WORKSPACE}"
+        //             if ("${gitUrl.tokenize('/')[0]}" == 'github.com') {
+        //                 credId = 'dohyun_github'
+        //             } else {
+        //                 credId = 'gitlab_token'
+        //             }
+        //             git([branch: "${gitBranch}", credentialsId:"${credId}", url: "http://${gitCred}@${gitUrl}"])
+        //         }
+        //     }
+        // }
         stage('Git Clone') {
             steps {
-                sh "sudo chown -R jenkins ."
-                sh 'ls -al'
-                sh 'rm -rf *'
-                sh 'rm -rf .g*'
-                sh 'git init'
                 script {
                     echo "${env.WORKSPACE}"
                     if ("${gitUrl.tokenize('/')[0]}" == 'github.com') {
@@ -32,7 +45,16 @@ pipeline {
                     } else {
                         credId = 'gitlab_token'
                     }
-                    git([branch: "${gitBranch}", credentialsId:"${credId}", url: "http://${gitCred}@${gitUrl}"])
+                    def gitRepo = "http://${gitCred}@${gitUrl}"
+                    sh "sudo chown -R jenkins ."
+                    sh "rm -rf * .git"
+                    // Shallow clone
+                    sh """
+                        git init
+                        git remote add origin ${gitRepo}
+                        git fetch --depth=1 origin ${gitBranch}
+                        git checkout FETCH_HEAD
+                    """
                 }
             }
         }
@@ -59,10 +81,13 @@ pipeline {
             }
         }
         stage('Build Jar') {
+            environment {
+                GRADLE_USER_HOME = "${env.WORKSPACE}/.gradle"
+            }
             steps {
                 echo "${version}"
                 sh 'chmod +x ./gradlew'
-                sh "./gradlew clean build jenkins -PbuildVersion=${version} -PcommitId=${commitId}"
+                sh "./gradlew build -PbuildVersion=${version} -PcommitId=${commitId} --no-daemon --parallel"
             }
         }
         stage('Upload Jar') {
@@ -83,17 +108,10 @@ pipeline {
         stage ('Build and Upload Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} .")
-                    // sh "docker push ${dockerRegistry}/super-app-server:${version}"
+                    def dockerImage = docker.build("${dockerRegistry}/super-app-server:${version}", "--build-arg version=${version} --cache-from=${dockerRegistry}/super-app-server:latest .")
                     sh "docker login hyperregistry.tmaxcloud.org -u admin -p admin"
                     sh "docker tag ${dockerRegistry}/super-app-server:${version} hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
                     sh "docker push hyperregistry.tmaxcloud.org/super-app-server/super-app-server:${version}"
-                    // if (releaseOption == 'Full release' || releaseOption == 'Fix release') {
-                    //     sh "docker tag ${dockerRegistry}/super-app-server:${version} public.ecr.aws/l0p3k1b5/sas-worker:${version}"
-                    //     sh "docker tag ${dockerRegistry}/super-app-server:${version} public.ecr.aws/l0p3k1b5/sas-worker"
-                    //     sh "docker push public.ecr.aws/l0p3k1b5/sas-worker:${version}"
-                    //     sh "docker push public.ecr.aws/l0p3k1b5/sas-worker"
-                    // }
                     sh "docker rmi ${dockerRegistry}/super-app-server:${version}"
                }
            }
