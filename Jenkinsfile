@@ -77,13 +77,10 @@ pipeline {
             }
         }
         stage('Build Jar') {
-            environment {
-                GRADLE_USER_HOME = "${env.WORKSPACE}/.gradle"
-            }
             steps {
                 echo "${version}"
                 sh 'chmod +x ./gradlew'
-                sh "./gradlew jenkins -PbuildVersion=${version} -PcommitId=${commitId} --no-daemon --parallel"
+                sh "./gradlew clean build jenkins -PbuildVersion=${version} -PcommitId=${commitId}"
             }
         }
         stage('Upload Jar') {
