@@ -38,6 +38,11 @@ pipeline {
         // }
         stage('Git Clone') {
             steps {
+                sh "sudo chown -R jenkins ."
+                sh 'ls -al'
+                sh 'rm -rf *'
+                sh 'rm -rf .g*'
+                sh 'git init'
                 script {
                     echo "${env.WORKSPACE}"
                     if ("${gitUrl.tokenize('/')[0]}" == 'github.com') {
@@ -45,16 +50,7 @@ pipeline {
                     } else {
                         credId = 'gitlab_token'
                     }
-                    def gitRepo = "http://${gitCred}@${gitUrl}"
-                    sh "sudo chown -R jenkins ."
-                    sh "rm -rf * .git"
-                    // Shallow clone
-                    sh """
-                        git init
-                        git remote add origin ${gitRepo}
-                        git fetch --depth=1 origin ${gitBranch}
-                        git checkout FETCH_HEAD
-                    """
+                    git([branch: "${gitBranch}", credentialsId:"${credId}", url: "http://${gitCred}@${gitUrl}"])
                 }
             }
         }
