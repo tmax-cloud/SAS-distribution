@@ -83,7 +83,7 @@ pipeline {
             steps {
                 echo "${version}"
                 sh 'chmod +x ./gradlew'
-                sh "./gradlew build -PbuildVersion=${version} -PcommitId=${commitId} --no-daemon --parallel"
+                sh "./gradlew jenkins -PbuildVersion=${version} -PcommitId=${commitId} --no-daemon --parallel"
             }
         }
         stage('Upload Jar') {
